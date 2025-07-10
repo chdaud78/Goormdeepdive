@@ -6,6 +6,13 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Table</title>
+    <style>
+        td {
+            padding: 10px;
+            border: 1px solid #333;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
 <header>
@@ -13,7 +20,20 @@
 </header>
 <main>
     <table>
+        <colgroup>
+            <col width="12%">
+            <col width="auto">
+            <col width="auto">
+            <col width="auto">
+            <col width="auto">
+            <col width="12%">
+        </colgroup>
         <thead>
+        <tr>
+            <td colspan="6" style="background-color: #61dafb">table Layout</td>
+        </tr>
+        </thead>
+        <tbody>
         <tr>
             <td>1</td>
             <td>2</td>
@@ -22,18 +42,16 @@
             <td>5</td>
             <td>6</td>
         </tr>
-        </thead>
-        <tbody>
         <tr>
-            <td colspan="3" style="text-align: center; background-color: mediumvioletred">7</td>
-            <td colspan="3" style="text-align: center; background-color: mediumvioletred">8</td>
+            <td colspan="3" style="background-color: mediumvioletred">7</td>
+            <td colspan="3" style="background-color: mediumvioletred">8</td>
         </tr>
         <tr>
-            <td rowspan="2" style="text-align: center; background-color: mediumvioletred">9</td>
+            <td rowspan="2" style="background-color: mediumvioletred">9</td>
             <td>10</td>
-            <td rowspan="2" style="text-align: center; background-color: mediumvioletred">11</td>
+            <td rowspan="2" style="background-color: mediumvioletred">11</td>
             <td>12</td>
-            <td rowspan="2" style="text-align: center; background-color: mediumvioletred">13</td>
+            <td rowspan="2" style="background-color: mediumvioletred">13</td>
             <td>14</td>
         </tr>
         <tr>
@@ -51,7 +69,7 @@
         </tr>
         <tr>
             <td>24</td>
-            <td colspan="4" rowspan="3" style="text-align: center; background-color: mediumvioletred">25</td>
+            <td colspan="4" rowspan="3" style="background-color: mediumvioletred">25</td>
             <td>25</td>
         </tr>
         <tr>
@@ -63,6 +81,11 @@
             <td>29</td>
         </tr>
         </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="6" style="background-color: #61dafb">table Layout</td>
+        </tr>
+        </tfoot>
     </table>
 </main>
 <footer></footer>
