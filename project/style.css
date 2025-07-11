@@ -1,0 +1,15 @@
+body {
+    background-color: pink;
+}
+span {
+    background-color: #0ff;
+}
+#BoxCont1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    margin: -50px -50px;
+    background-color: #f00
+}
