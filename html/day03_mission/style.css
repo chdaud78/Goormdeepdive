@@ -1,0 +1,14 @@
+.spinner_container_1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.spinner_container_1 .spinner_wrap {
+    width: 100px;
+    height: 100px;
+    background-color: lawngreen;
+}
+.spinner_container_1 .spinner {
+    border: 10px solid #ffffff;
+}
