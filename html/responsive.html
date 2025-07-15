@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        header {
+            background-color: pink;
+            color: #fff;
+            padding: 20px;
+            font-size: 24px;
+            text-align: center;
+        }
+        .container {
+            width: 100%;
+            min-width: 320px;
+            max-width: 1920px;
+            margin: 10px auto 0 auto;
+            padding: 0 20px;
+        }
+        .box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            min-width: 90%;
+            margin-bottom: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 10px;
+            box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-size: 18px;
+            transition: 0.5s ease;
+        }
+        .box img{
+            width: 100%;
+            object-fit: cover;
+        }
+        .wrap .box:nth-child(2) img {
+            width: 90%;
+        }
+        .box:hover {
+            transform: scale(1.01);
+        }
+        @media only screen and (min-width: 640px){
+        }
+        @media only screen and (min-width: 1024px){
+            .container {
+                display: flex;
+                flex-wrap: wrap;
+            }
+            .box {
+                width: 50%;
+                min-width: 40%;
+            }
+            .wrap {
+                width: calc(50% - 10px);
+                margin-left: 10px;
+            }
+            .wrap .box {
+                width: 100%;
+            }
+            .wrap2 {
+                width: 100%;
+            }
+            .wrap2 .box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>반응형 웹페이지 예제</header>
+
+    <div class="container">
+        <div class="box"><img src="image/image.jpg" alt="포스터"></div>
+        <div class="wrap">
+            <div class="box"><img src="image/image5.png" alt="차은우"></div>
+            <div class="box"><img src="image/image6.png" alt="차은우"></div>
+            <div class="box"><img src="image/image7.png" alt="차은우"></div>
+        </div>
+        <div class="wrap2">
+            <div class="box">
+                본명
+                이동민 (李東敏, Lee Dongmin)
+                출생
+                1997년 3월 30일 (28세)
+                경기도 군포시 산본동
+                거주지
+                서울특별시 강남구 청담동
+                국적
+                대한민국 국기
+                대한민국
+                본관
+                양성 이씨 (陽城 李氏)[6]
+                신체
+                183.3cm[7] | 74kg[8] | B형[9] | 280mm
+                가족
+                아버지, 어머니 최유남(1973년생)[10]
+                남동생 이동휘(1999년생)[11]
+                반려견
+                동동이(♀, 미니 비숑)[12]
+                학력
+                능내초등학교 (졸업)
+                수리중학교 (졸업)
+                수리고등학교[13] (전학)
+                한림연예예술고등학교 (연예과 / 졸업)
+                성균관대학교 예술대학 (연기예술학 연기 전공 / 학사)
+                병역
+                대한민국 육군 군악대 복무 예정
+                입대까지 D-13
+                (2025년 7월 28일 ~ 2027년 1월 27일)
+                소속사
+                판타지오
+                소속 그룹
+                ASTRO
+                데뷔
+
+
+
+                수식어
+                최최차차[14], 얼굴천재[15], 만찢남[16]
+                별명
+                MBTI
+                INTJ[28]
+            </div>
+        </div>
+    </div>
+</body>
+</html>
