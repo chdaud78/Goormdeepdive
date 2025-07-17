@@ -1,0 +1,45 @@
+/*  */
+body {
+    background-color: #ccc;
+}
+header {
+    padding: 30px;
+    margin-bottom: 20px;
+    background-color: blueviolet;
+}
+header h1 {
+    text-align: center;
+    font-size: 30px;
+}
+main {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* 자기 소개 탭 */
+.info {
+    width: 300px;
+    height: 1000px;
+    border: 1px solid #ccc;
+    background-color: white;
+}
+.info img {
+    width: 100%;
+}
+
+/* 카드 레이아웃 */
+.card-wrap {
+    width: 500px;
+    height: 500px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    background-color: white;
+}
+footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: blueviolet;
+}

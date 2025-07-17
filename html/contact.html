@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Contact Us</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,body {
+            height: 100%;
+        }
+        body {
+            background-color: #f2f2f2;
+        }
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            height: 60px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        fieldset {
+            border: 0 none;
+        }
+
+        header {text-align: center}
+
+        .wrap {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+        }
+        .container {
+            width: 100%;
+        }
+        .row {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+            padding: 0 50px;
+        }
+        .column {
+            flex: 1;
+            width: 50%;
+            height: auto;
+        }
+        .screen-out {
+            overflow: hidden;
+            position: absolute;
+            width: 0;
+            height: 0;
+            font-size: 0;
+            line-height: 0;
+            text-indent: -9999px;
+        }
+        .bg-img {
+            height: 100%;
+            background: url("image/winter.jpg") no-repeat 0 0;
+            background-size: cover;
+        }
+        .item {
+            margin-bottom: 10px;
+        }
+        .item textarea {
+            height: 150px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            background-color: #272447;
+            color: white;
+            border-radius: 5px;
+        }
+
+        @media only screen and (max-width: 640px) {
+            header {
+                position: absolute;
+                top: 250px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .row {
+                display: block;
+            }
+            .column {
+                width: 100%;
+            }
+            .column:first-child {
+                height: 300px;
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <section class="container">
+        <header>
+            <h1>Contact us!</h1>
+            <p>문의 사항을 남겨주시면, 빠른 시일 내에 연락드리겠습니다.</p>
+        </header>
+        <div class="row">
+            <div class="column">
+                <div class="bg-img"></div>
+            </div>
+            <div class="column">
+                <form action="https://formspree.io/f/mrblgygo" method="post">
+                    <fieldset>
+                        <legend class="screen-out">문의 하기 폼</legend>
+                        <div class="item">
+                            <label for="username">이름</label>
+                            <input id="username" type="text" placeholder="이름을 입력해주세요." autocomplete="username"/>
+                        </div>
+                        <div class="item">
+                            <label for="email">이메일</label>
+                            <input id="email" type="email" placeholder="이메일을 입력해주세요." autocomplete="email"/>
+                        </div>
+                        <div class="item">
+                            <label for="type">문의 유형</label>
+                            <select id="type" name="type">
+                                <option value="type1">상담 문의</option>
+                                <option value="type2">견적 문의</option>
+                                <option value="type3">방문 문의</option>
+                            </select>
+                        </div>
+                        <div class="item">
+                            <label for="message">문의 내용</label>
+                            <textarea id="message" name="massage" placeholder="문의 내용을 입력해주세요."></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit" name="submit">확인</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>
