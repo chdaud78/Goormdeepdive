@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Parallax</title>
+    <link href="https://cdn.jsdelivr.net/npm/reset-css@5.0.2/reset.min.css" rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #333333;
+        }
+        header ul {
+            display: flex;
+        }
+        header ul li {
+            margin-right: 10px;
+            padding: 20px;
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
+        }
+        header span {
+            display: none;
+        }
+        header a {
+            color: white;
+            text-decoration: none;
+        }
+        ul li.active {
+            background-color: #4a90e2;
+        }
+        section {
+            background-attachment: fixed;
+            background-size: cover;
+        }
+        .content {
+            height: 100vh;
+        }
+        .text-box {
+            width: 100%;
+            background-color: #282c34;
+        }
+        .text-box p {
+            font-size: 50px;
+            padding: 30px;
+            color: white;
+            text-align: center;
+        }
+        .spring {
+            background-image: url("image/spring.jpg");
+        }
+        .summer {
+            background-image: url("image/summer.jpg");
+        }
+        .autumn {
+            background-image: url("image/autumn.jpg");
+        }
+        .winter {
+            background-image: url("image/winter.jpg");
+        }
+        @media only screen and (max-width: 640px) {
+            header ul {
+                display: none;
+            }
+            header span {
+                display: block;
+                color: white;
+                cursor: pointer;
+                padding: 20px;
+                font-size: 18px;
+            }
+            header {
+                display: flex;
+                justify-content: flex-end;
+            }
+            section {
+                background-attachment: scroll;
+                background-position: center center;
+            }
+            .content {
+                height: 40vh;
+            }
+            .text-box p {
+                font-size: 20px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <ul>
+            <li class="active"><a href="#spring">Spring</a></li>
+            <li><a href="#summer">Summer</a></li>
+            <li><a href="#autumn">Autumn</a></li>
+            <li><a href="#winter">Winter</a></li>
+        </ul>
+        <span>더보기</span>
+    </header>
+    <main>
+        <section class="spring" id="spring">
+            <div class="content"></div>
+            <div class="text-box">
+                <p>봄이네</p>
+            </div>
+        </section>
+        <section class="summer" id="summer">
+            <div class="content"></div>
+            <div class="text-box">
+                <p>여름이네</p>
+            </div>
+        </section>
+        <section class="autumn" id="autumn">
+            <div class="content"></div>
+            <div class="text-box">
+                <p>가을이네</p>
+            </div>
+        </section>
+        <section class="winter" id="winter">
+            <div class="content"></div>
+            <div class="text-box">
+                <p>겨울이네</p>
+            </div>
+        </section>
+    </main>
+    <footer></footer>
+</body>
+</html>
