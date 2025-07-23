@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Button</title>
+    <style>
+        .box {
+            background-color: #ff0000;
+            width: 100px;
+            height: 100px
+        }
+        .blue {
+            background-color: #4a90e2;
+        }
+        .menu {
+            display: none;
+        }
+        .menu.active {
+            display: block;
+        }
+        .button {
+            background-color: white;
+            border: 0 none;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <button type="button" id="myBtn" class="button">▼</button>
+    <div id="BoxRed" class="box">
+
+    </div>
+</div>
+<ul id="menu" class="menu">
+    <li>메뉴1</li>
+    <li>메뉴2</li>
+    <li>메뉴3</li>
+</ul>
+</body>
+
+<script>
+  const myBtn = document.getElementById("myBtn");
+  const menu = document.getElementById("menu");
+  myBtn.addEventListener("click", () => {
+    // alert("오전이라 피곤합니다.");
+    // console.log("테스트");
+
+    // document.getElementById("BoxRed").style.backgroundColor = "#000";
+    // document.getElementById('BoxRed').classList.add('blue');
+    menu.classList.toggle('active')
+    myBtn.classList.toggle('active')
+
+    if(myBtn.classList.contains('active')) myBtn.innerText = '▲';
+    else myBtn.innerText = '▼';
+  })
+</script>
+</html>

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Modal</title>
+    <link href="https://cdn.jsdelivr.net/npm/reset-css@5.0.2/reset.min.css" rel="stylesheet">
+    <style>
+        .modal-btn {
+            width: 100%;
+            height: 50px;
+            background-color: #4a90e2;
+            border: 0;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 1000px;
+            height: 1000px;
+            border: 1px solid #ccc;
+            transform: translate(-50%,-50%);
+            overflow-y: scroll;
+
+            &.active {
+                display: block;
+            }
+
+            .modal-header {
+                position: sticky;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 50px;
+                background-color: #272447;
+                color: white;
+                line-height: 50px;
+                text-align: center;
+            }
+
+            .modal-body {
+                height: 1000px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button id="modalBtn" class="modal-btn">모달 더보기</button>
+    <div id="modal" class="modal">
+        <div id="modalHeader" class="modal-header">모달 헤더</div>
+        <div class="modal-body"></div>
+        <button id="modalMore" class="modal-more">더보기</button>
+    </div>
+</body>
+<script type="text/javascript">
+  const modal = document.getElementById('modal');
+  const modalBtn = document.getElementById('modalBtn');
+  const modalHeader = document.getElementById('modalHeader');
+  const modalMore = document.getElementById('modalMore');
+
+  modalBtn.addEventListener("click", () => {
+    modal.classList.toggle('active');
+  });
+
+  modal.addEventListener('scroll', () => {
+    const scrollPosition = modal.scrollTop;
+
+    if(scrollPosition > 30) {
+      modalHeader.style.backgroundColor = '#272447';
+    } else {
+      modalHeader.style.backgroundColor = '#110202'
+    }
+
+    console.log(scrollPosition, modal.scrollY)
+  });
+
+  modalMore.addEventListener('click', () => {
+    let div = document.createElement('div');
+    modalMore.before(div);
+    div.classList.add('modal-body');
+  });
+
+</script>
+</html>
