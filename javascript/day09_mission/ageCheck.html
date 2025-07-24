@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>ageCheck</title>
+</head>
+<body>
+<main>
+  <h1>입장 확인기</h1>
+  <div>
+    <label for="names">이름</label>
+    <input id="names" type="text">
+  </div>
+  <div>
+    <label for="age">나이</label>
+    <input id="age" type="number">
+  </div>
+  <button class="btn" type="button">입장 가능 여부 확인</button>
+  <p class="result"></p>
+</main>
+</body>
+<script type="text/javascript">
+  const btn = document.querySelector('.btn');
+  const result = document.querySelector('.result');
+
+  let text = ""
+
+  btn.addEventListener('click', () => {
+    const names = document.getElementById('names').value;
+    const age = document.getElementById('age').value;
+
+    let text = "";
+
+    if(typeof name !== 'string' || typeof age !== 'number') {
+      console.error('type 오류')
+    }
+
+    if(names === '') {
+      result.innerText = '이름을 적으세요!'
+      return;
+    }
+    if(age === '') {
+      result.innerText = '나이를 적으세요!'
+      return;
+    }
+    if(age < 0) {
+      result.innerText = '나이를 똑바로 적으세요!'
+      return;
+    }
+
+    if (age < 20) {
+      text = `${names}님은 ${age}살 이므로 입장불가합니다.`;
+    } else {
+      text = `${names}님은 ${Number(age) + 1}살이 되겠네요.`;
+    }
+
+    result.innerText = text;
+  });
+</script>
+</html>
