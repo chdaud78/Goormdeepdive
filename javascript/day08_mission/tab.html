@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tabs</title>
+    <style>
+        * {
+            border: 0;
+            padding: 0;
+            margin: 0;
+        }
+        header {
+            width: 100%;
+            background-color: #272447;
+
+            .tabs-container {
+                width: 100%;
+
+                overflow-x: scroll;
+                scroll-behavior: smooth;
+            }
+
+            .tabs-wrap {
+                display: flex;
+                gap: 10px;
+                padding: 15px;
+                white-space: nowrap;
+            }
+
+            .tabs-wrap::after {
+                content: '';
+                display: block;
+                flex: 0 0 15px;
+            }
+
+            .tab {
+                display: inline-block;
+                border: 1px solid #ccc;
+                padding: 10px 20px;
+                border-radius: 5px;
+                color: white;
+                cursor: pointer;
+
+                &.active {
+                    background-color: #4a90e2;
+                    color: white;
+                }
+
+                &:last-child {
+                    margin-right: 15px;
+                }
+            }
+        }
+        main {
+            width: 100%;
+            height: 80vh;
+
+            .main-container {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                text-align: center;
+                font-size: 30px;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="tabs-container">
+        <div class="tabs-wrap">
+        </div>
+    </div>
+</header>
+<main>
+    <div class="main-container"></div>
+</main>
+</body>
+<script type="text/javascript">
+    const tabsContainer = document.querySelector('.tabs-container');
+    const tabsWrap = document.querySelector('.tabs-wrap');
+    const mainContainer = document.querySelector('.main-container');
+
+    // tab 생성
+    for(let i = 0; i < 50 ; i++) {
+      const tabs = document.createElement('span');
+      tabs.classList.add(`tab`, `tab${i}`);
+      tabs.innerText = `TAB${i}`
+
+      tabsWrap.append(tabs);
+    }
+
+    let activeTab = null;
+    tabsWrap.addEventListener('click', (e) => {
+      let target = e.target;
+
+      // active 효과
+      if(target.classList.contains('tab')) {
+        // active Class 추가
+        if(activeTab) activeTab.classList.remove('active');
+        target.classList.add('active');
+        activeTab = target;
+      }
+
+      if(target.classList.contains('active')) {
+        let className = target.className;
+
+        const [_,tabIdx,__] = className.split(' ');
+        mainContainer.innerText = `${tabIdx}를 보여드리고 있습니다.`
+      }
+
+      // 탭 중앙 이동
+      let containerWidth = tabsContainer.offsetWidth
+      let selectTargetWidth = target.offsetWidth;
+      let selectTargetLeft = target.offsetLeft;
+
+      const scrollTo = selectTargetLeft - (containerWidth/2) + (selectTargetWidth/2);
+
+      tabsContainer.scrollTo({
+        left: scrollTo,
+        behavior : 'smooth'
+      })
+
+      /*target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'center'
+      })*/
+    });
+</script>
+</html>
