@@ -71,15 +71,7 @@
       onlyNumber = onlyNumber.slice(0,11);
     }
 
-    let formatted = onlyNumber;
-
-    if(onlyNumber.length >= 7 ) {
-      formatted = onlyNumber.replace(/(\d{3})(\d{4})(\d{0,4})/, "$1-$2-$3");
-    } else if(onlyNumber.length >= 4) {
-      formatted = onlyNumber.replace(/(\d{3})(\d{4})/, "$1-$2");
-    }
-
-    telInput.value = formatted
+    telInput.value = onlyNumber.replace(/(\d{3})(\d{4})(\d{0,4})/, "$1-$2-$3")
 
     // 정규식 X
     /*let value = telInput.value;
