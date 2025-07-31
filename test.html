@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>thead, tbody, tfoot 예시</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin: 20px auto;
+            table-layout: fixed;
+        }
+        thead tr {
+            background-color: #4CAF50;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+        tfoot tr {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            position: sticky;
+            bottom: 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            word-wrap: break-word;
+        }
+        tbody {
+            display: block;
+        }
+        thead, tfoot {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+        tbody tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+    </style>
+</head>
+<body>
+
+<table>
+    <thead>
+    <tr>
+        <th>이름</th>
+        <th>점수</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr><td>홍길동</td><td>95</td></tr>
+    <tr><td>이몽룡</td><td>88</td></tr>
+    <tr><td>성춘향</td><td>92</td></tr>
+    <tr><td>장보고</td><td>85</td></tr>
+    <tr><td>김유신</td><td>90</td></tr>
+    <tr><td>강감찬</td><td>87</td></tr>
+    <tr><td>안중근</td><td>91</td></tr>
+    <tr><td>윤봉길</td><td>89</td></tr>
+    <tr><td>신사임당</td><td>93</td></tr>
+    <tr><td>이순신</td><td>98</td></tr>
+    </tbody>
+
+    <tfoot>
+    <tr>
+        <td>총합</td>
+        <td>908</td>
+    </tr>
+    </tfoot>
+</table>
+
+</body>
+</html>

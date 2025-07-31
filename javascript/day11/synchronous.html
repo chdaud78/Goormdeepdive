@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<button onclick="makeCoffee()">커피 만들기 시작</button>
+<button onclick="nextOrder()">다음 손님 주문</button>
+</body>
+
+<script>
+    function makeCoffee() {
+      console.log("1. 커피 주문");
+      console.log("2. 커피 만드는 중");
+
+      setTimeout(() => {
+        console.log("3. 커피 다만듬")
+      },5000);
+
+      console.log("결제 먼저")
+    }
+
+    function nextOrder() {
+      alert("다음 주문을 받아주세요.");
+      makeCoffee();
+    }
+</script>
+</html>
