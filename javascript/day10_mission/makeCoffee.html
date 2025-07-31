@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Make Coffee</title>
+</head>
+<body>
+  <h2>커피 주문 시스템</h2>
+  <button onclick="handleOrder()">커피 주문하기</button>
+  <div id="log"></div>
+</body>
+<script>
+  let orderNumber = 0;
+
+  // 커피 만드는 함수 (Promise + async/await)
+  function makeCoffee(orderId) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(`[${orderId}번째 주문] 👍 커피가 완성 되었습니다.`);
+      }, 3000)
+    })
+  }
+
+  // 주문 처리 함수
+  async function handleOrder () {
+    orderNumber++;
+    const currentOrder = orderNumber;
+
+    const log = document.getElementById('log');
+    const logItem = document.createElement('div');
+    logItem.className = "log-item";
+    logItem.id = `order-${currentOrder}`;
+    logItem.textContent = `[${currentOrder}번째 주문] 커피를 만드는 중입니다. 🫡`;
+    log.appendChild(logItem);
+
+    logItem.textContent = await makeCoffee(currentOrder);
+  }
+</script>
+</html>
