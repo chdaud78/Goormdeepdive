@@ -1,0 +1,18 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Toast</title>
+    <link rel="stylesheet" href="./toast.css">
+    <script src="toast.js"></script>
+</head>
+
+<body>
+<button onclick="new Toast('저장 완료!', { type: 'success', duration: 3000, position:'top-right' })">토스트 띄우기</button>
+<button onclick="new Toast('에러!', { type: 'error', duration: 3000, position:'bottom-left' })">토스트 띄우기</button>
+<button onclick="new Toast('오류!', { type: 'warning', duration: 3000, position:'bottom-right' })">토스트 띄우기</button>
+<button onclick="new Toast('알림!', { type: 'info', duration: 3000, position:'center' })">토스트 띄우기</button>
+</body>
+</html>
