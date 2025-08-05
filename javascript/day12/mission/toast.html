@@ -1,0 +1,176 @@
+
+    <!DOCTYPE html>
+    <html lang="ko">
+
+    <head>
+    <meta charset="UTF-8" />
+    <style>
+     .toast-container {
+       position: fixed;
+       z-index: 9999;
+       display: flex;
+       flex-direction: column;
+       gap: 10px;
+     }
+
+    .toast-container.top-right {
+      top: 20px;
+      right: 20px;
+      align-items: flex-end;
+    }
+
+    .toast-container.bottom-right {
+      bottom: 20px;
+      right: 20px;
+      align-items: flex-end;
+    }
+
+    .toast-container.top-left {
+      top: 20px;
+      left: 20px;
+      align-items: flex-start;
+    }
+
+    .toast-container.bottom-left {
+      bottom: 20px;
+      left: 20px;
+      align-items: flex-start;
+    }
+
+    .toast-container.center {
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      align-items: center;
+    }
+
+    .toast {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 200px;
+      max-width: 300px;
+      background-color: #444;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 0.3s ease;
+      position: relative;
+      font-family: sans-serif;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast .icon {
+      font-size: 18px;
+    }
+
+    .toast .close {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    /* 상태별 색상 */
+    .toast.success {
+      background-color: #2ecc71;
+    }
+
+    .toast.error {
+      background-color: #e74c3c;
+    }
+
+    .toast.warning {
+      background-color: #f39c12;
+    }
+
+    .toast.info {
+      background-color: #3498db;
+    }
+  </style>
+
+
+  <title>Toast</title>
+</head>
+
+<body>
+<button onclick="new Toast('저장 완료!', { type: 'success', duration: 3000, position:'top-right' })">토스트 띄우기</button>
+
+
+</body>
+<script>
+  class Toast {
+    constructor(message, option) {
+      this.message = message;
+      this.option = {
+        type : option.type,
+        duration : option.duration,
+        position : option.position,
+      };
+
+      this._creat();
+    }
+
+    _creat() {
+      let container = document.querySelector('.toast-container');
+
+      if(!container) {
+        container = document.createElement('div');
+        container.classList.add('toast-container');
+        container.classList.add(this.option.position);
+        document.body.appendChild(container)
+      }
+
+      let toast = document.createElement('div');
+      toast.classList.add('toast');
+
+      switch (this.option.type) {
+        case 'success' :
+          toast.classList.add('success');
+          toast.innerHTML = `<span class="icon">✅</span> ${this.message}`;
+          break;
+        case 'error' :
+          toast.classList.add('error');
+          toast.innerHTML = `<span class="icon">❌</span> ${this.message}`;
+          break;
+        case 'warning' :
+          toast.classList.add('warning');
+          toast.innerHTML = `<span class="icon">⚠️</span> ${this.message}`;
+          break;
+        case 'info' :
+          toast.classList.add('info');
+          toast.innerHTML = `ℹ<span class="icon">ℹ️</span>️ ${this.message}`;
+          break;
+      }
+
+      let closeBtn = document.createElement('span');
+      closeBtn.classList.add('close');
+      closeBtn.innerText = 'x';
+      closeBtn.addEventListener('click', () => this._remove(toast));
+      toast.appendChild(closeBtn);
+
+      setTimeout(() => toast.classList.add('show'));
+      container.appendChild(toast);
+
+      setTimeout(() => this._remove(toast), this.option.duration);
+    }
+
+    _remove(element) {
+      if(!element) return;
+      element.classList.remove('show');
+
+      setTimeout(() => {
+        element.remove();
+      },this.option.duration)
+    }
+  }
+</script>
+</html>
