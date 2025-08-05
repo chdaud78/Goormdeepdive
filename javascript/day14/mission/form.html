@@ -110,7 +110,6 @@
 </head>
 <body>
 <div class="form-container">
-    <div class="result-box"></div>
     <div class="form-wrap create-form">
         <div class="input-wrap">
             <label for="name">이름</label>
@@ -183,8 +182,6 @@
     const btnCheck = document.querySelector('.btn-check');
     const btnCount = document.querySelector('.btn-count');
 
-    const resultBox = document.querySelector('.result-box');
-
     const errorMessages = {
         '이미 존재하는 이름입니다.': '이미 존재하는 이름입니다!',
         '이름은 두 글자 이상 입니다.': '이름은 두 글자 이상 입니다.',
@@ -210,7 +207,6 @@
       } catch (err) {
         const msg = errorMessages[err.message] || '생성 실패!';
         new Toast(msg, { type: 'error', duration: 3000, position: 'top-right' });
-        console.log(err);
       }
     })
 
@@ -221,12 +217,8 @@
         if(check) {
           new Toast('비밀 번호가 일치합니다!', { type: 'success', duration: 3000, position:'top-right' })
         } else {
-          resultBox.classList.remove('success');
-          resultBox.classList.add('fail', 'show');
           new Toast('비밀 번호가 일치하지 않습니다!', { type: 'error', duration: 3000, position:'top-right' })
         }
-
-        console.log(users);
     })
 
     btnCount.addEventListener('click', () => {
