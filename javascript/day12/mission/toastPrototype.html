@@ -103,52 +103,41 @@
 
 <body>
 <button onclick="new Toast('저장 완료!', { type: 'success', duration: 3000, position:'top-right' })">토스트 띄우기</button>
-
-
+<button onclick="new Toast('에러!', { type: 'error', duration: 3000, position:'bottom-left' })">토스트 띄우기</button>
+<button onclick="new Toast('오류!', { type: 'warning', duration: 3000, position:'bottom-right' })">토스트 띄우기</button>
+<button onclick="new Toast('알림!', { type: 'info', duration: 3000, position:'center' })">토스트 띄우기</button>
 </body>
 <script>
-  function Toast(message, option) {
+  function Toast(message, {type = 'success', duration = 3000, position = 'top-right'} ={}) {
     this.message = message;
-    this.option = {
-      type : option.type,
-      duration : option.duration,
-      position : option.position,
-    };
+    this.type = type;
+    this.duration = duration;
+    this.position = position;
 
     this._creat();
   }
 
+  Toast.ICONS = {
+    success: '✅',
+    error: '❌',
+    warning: '⚠️',
+    info: 'ℹ️',
+  }
+
   Toast.prototype._creat = function () {
-    let container = document.querySelector('.toast-container');
+    let container = document.querySelector(`.toast-container.${this.position}`);
 
     if(!container) {
       container = document.createElement('div');
-      container.classList.add('toast-container');
-      container.classList.add(this.option.position);
+      container.classList.add('toast-container', this.position);
       document.body.appendChild(container);
     }
 
-    let toast = document.createElement('div');
-    toast.classList.add('toast');
+    const toast = document.createElement('div');
+    toast.classList.add('toast', this.type);
 
-    switch (this.option.type) {
-      case 'success' :
-        toast.classList.add('success');
-        toast.innerHTML = `<span class="icon">✅</span> ${this.message}`;
-        break;
-      case 'error' :
-        toast.classList.add('error');
-        toast.innerHTML = `<span class="icon">❌</span> ${this.message}`;
-        break;
-      case 'warning' :
-        toast.classList.add('warning');
-        toast.innerHTML = `<span class="icon">⚠️</span> ${this.message}`;
-        break;
-      case 'info' :
-        toast.classList.add('info');
-        toast.innerHTML = `ℹ<span class="icon">ℹ️</span>️ ${this.message}`;
-        break;
-    }
+    const icon = Toast.ICONS[this.type];
+    toast.innerHTML = `<span class="icon">${icon}</span> ${this.message}`;
 
     let closeBtn = document.createElement('span');
     closeBtn.classList.add('close');
@@ -156,10 +145,11 @@
     closeBtn.addEventListener('click', () => this._remove(toast));
     toast.appendChild(closeBtn);
 
-    setTimeout(() => toast.classList.add('show'));
     container.appendChild(toast);
 
-    setTimeout(() => this._remove(toast), this.option.duration);
+    setTimeout(() => toast.classList.add('show'));
+
+    setTimeout(() => this._remove(toast), this.duration);
   }
 
   Toast.prototype._remove = function (element) {
@@ -168,7 +158,7 @@
 
     setTimeout(() => {
       element.remove();
-    },this.option.duration)
+    }, 300)
   }
 </script>
 </html>

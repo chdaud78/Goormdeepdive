@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Closer</title>
+</head>
+<body>
+<h2>카운터 예제</h2>
+<button id="btn">+1 증가</button>
+<p id="count">0</p>
+</body>
+
+<script>
+    function createCounter() {
+      let count = 0 ;
+      return function () {
+        count++;
+        document.getElementById("count").textContent = count;
+      }
+    }
+
+    const counter = createCounter();
+    document.getElementById("btn").addEventListener("click", counter);
+</script>
+</html>
