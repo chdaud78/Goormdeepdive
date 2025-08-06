@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+  <head>
+  <meta charset="UTF-8">
+  <title>Object.create()</title>
+<style>
+  body {
+  font-family: sans-serif;
+  padding: 20px;
+}
+
+  h2 {
+  margin-top: 30px;
+}
+
+  button {
+  margin-top: 10px;
+  padding: 8px 16px;
+}
+
+  pre {
+  background: #f4f4f4;
+  padding: 10px;
+  border-radius: 4px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Object.create()</h1>
+
+<!-- 1. 상속형 컴포넌트 -->
+<h2>상속형 컴포넌트</h2>
+<button onclick="component.render()">렌더링 하기</button>
+<pre id="output1"></pre>
+
+<!-- 2. 안전한 해시맵 -->
+<h2>안전한 해시맵 (Object.create(null))</h2>
+<input id="keyInput" placeholder="toString를 키로 입력" />
+<input id="valueInput" placeholder="값 입력" />
+<button onclick="addToSafeMap()">추가</button>
+<pre id="output2"></pre>
+
+<!-- 3. 읽기 전용 설정 -->
+<h2>읽기 전용 설정 객체</h2>
+<input id="appName" placeholder="앱 이름 수정" />
+<button onclick="tryToModify()">이름 바꾸기 시도</button>
+<p id="text"></p>
+<pre id="output3"></pre>
+
+</body>
+  <script>
+    // 1. 상속형 컴포넌트
+    const BaseComponent = {
+      mount() {
+        return `컴포넌트 마운트 완료`;
+      },
+    };
+    const component = Object.create(BaseComponent);
+    component.render = function () {
+      const result = this.mount() + `\n 랜더링 완료!`;
+      document.getElementById('output1').textContent = result;
+    };
+
+    // 안전한 해시맵
+    const safeMap = Object.create(null);
+    function addToSafeMap() {
+      const key = document.getElementById("keyInput").value;
+      const value = document.getElementById("valueInput").value;
+      safeMap[key] = value;
+
+      let result = "저장된 키 목록:\n";
+      for (let k in safeMap) {
+        result += `${k} : ${safeMap[k]}\n`;
+      }
+      document.getElementById("output2").textContent = result;
+    }
+
+    // 읽기 전용 설정 객체
+    const config = Object.create(Object.prototype, {
+      appName : {
+        value: "MySecureApp",
+        writable : false,
+        enumerable: true
+      }
+    });
+    document.getElementById("output3").textContent =
+            `설정된 이름 : ${config.appName}`;
+    function tryToModify() {
+      console.log()
+      config.appName = document.getElementById("appName").value;
+
+      document.getElementById("text").textContet =
+              `변경할 이름 이름 : ${document.getElementById("appName").value}`;
+      document.getElementById("output3").textContent =
+              `설정된 이름 : ${config.appName} (변경 시도 무시됨)`;
+    }
+  </script>
+</html>
