@@ -24,14 +24,25 @@
             font-size: 28px;
             color: #34495e;
         }
+        .card-container {
+            padding-bottom: 30px
+        }
         .card {
             width: 100%;
             max-width: 1000px;
+            margin-top: 30px;
+        }
+        .card-tra {
+            margin-top: 0;
+        }
+        .card.card-tra .card-body {
+            margin-top: 0;
         }
         .card-wrap {
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
         }
         .card .card-header {
             display: flex;
@@ -53,6 +64,22 @@
                     margin-left: 10px;
                     font-size: 18px;
                 }
+            }
+        }
+        .card-temp {
+            display: flex;
+            justify-content: center;
+            align-content: center;
+
+            .line {
+                margin-right: 30px;
+                height: 50px;
+                border: 1px dashed #4a90e2;
+            }
+            p {
+                line-height: 50px;
+                font-size: 14px;
+                color: #4a90e2;
             }
         }
         .card .card-body {
@@ -81,15 +108,25 @@
 
                 .place::before {
                     content: "";
+                    display: inline-block;
                     width: 10px;
                     height: 10px;
-                    border: 1px solid #ccc;
                     border-radius: 50%;
                     margin-right: 10px;
+                    background-color: #ccc;
                 }
 
                 .info {
                     margin-left: 30px;
+                }
+
+                .time::before {
+                    content: "";
+                    width: 10px;
+                    height: 10px;
+                    margin-right: 13px;
+                    margin-left: 5px;
+                    border: 1px solid #ccc;
                 }
 
                 .time {
@@ -98,6 +135,14 @@
                     color: #555;
                 }
 
+                .seat::before {
+                    content: "";
+                    width: 10px;
+                    height: 10px;
+                    margin-right: 13px;
+                    margin-left: 5px;
+                    border: 1px solid #ccc;
+                }
                 .seat {
                     margin: 10px 0;
                     font-weight: bold;
@@ -115,30 +160,6 @@
 <main>
     <div class="card-container">
         <div class="card-wrap">
-            <div class="card">
-                <div class="card-header">
-                    <div class="info-header">
-                        <span>여정1</span>
-                        <p>서울 -> 로스앤젤레스</p>
-                    </div>
-                    <p>11시간 00분</p>
-                </div>
-                <div class="card-body">
-                    <div class="card-left">
-                        <p>유나이티드 항공</p>
-                        <span>실제 탑승::텔타항공</span>
-                    </div>
-                    <div class="card-right">
-                        <p>1월 29일</p>
-                        <div class="info">
-                            <p class="place"><b>19:10</b> 샌프란시스코 SFO</p>
-                            <p class="time">01시간 33분</p>
-                            <p class="seat">일반석 / 무료위탁 수하물 (1인) 2개</p>
-                            <p class="place"><b>20:43</b> 라스베이거스 LAS</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </main>
@@ -153,11 +174,12 @@
         "fltno": "17",
         "depcitynm": "서울",
         "depairportnm": "인천",
+          "depairportcd": "ICN",
         "depdate": "20251201",
         "deptm": "1430",
         "arrcitynm": "로스앤젤레스",
         "arrairportcd": "LAX",
-        "arrdate": "20251201",
+        "arrdate": "20251202",
         "arrtm": "0830",
         "bookingclass": "Y",
         "cabinclassnm": "일반석",
@@ -172,9 +194,11 @@
         "airnm": "유나이티드항공",
         "fltno": "391",
         "depcitynm": "로스앤젤레스",
+          "depairportcd": "LAX",
         "depdate": "20251231",
         "deptm": "0721",
         "arrcitynm": "샌프란시스코",
+          "arrairportcd": "SFO",
         "arrdate": "20251231",
         "arrtm": "0848",
         "bookingclass": "Q",
@@ -190,9 +214,11 @@
         "airnm": "유나이티드항공",
         "fltno": "1995",
         "depcitynm": "샌프란시스코",
+          "depairportcd": "LAX",
         "depdate": "20260129",
         "deptm": "1910",
         "arrcitynm": "라스베이거스",
+          "arrairportcd": "LAS",
         "arrdate": "20260129",
         "arrtm": "2043",
         "bookingclass": "Q",
@@ -208,9 +234,11 @@
         "airnm": "대한항공",
         "fltno": "7532",
         "depcitynm": "라스베이거스",
+          "depairportcd": "LAS",
         "depdate": "20260227",
         "deptm": "1950",
         "arrcitynm": "로스앤젤레스",
+          "arrairportcd": "LAX",
         "arrdate": "20260227",
         "arrtm": "2110",
         "bookingclass": "Y",
@@ -226,10 +254,12 @@
         "airnm": "대한항공",
         "fltno": "12",
         "depcitynm": "로스앤젤레스",
+          "depairportcd": "LAX",
         "depdate": "20260227",
         "deptm": "2240",
         "arrcitynm": "서울",
         "arrairportnm": "인천",
+          "arrairportcd": "ICN",
         "arrdate": "20260301",
         "arrtm": "0450",
         "bookingclass": "Y",
@@ -240,5 +270,74 @@
       }
     ]
 
+    function formatDate(item) {
+        const month = item.slice(4, 6);
+        const day = item.slice(6, 8);
+
+        return `${month.padStart(2, '0')}월 ${day.padStart(2, '0')}일`;
+    }
+    function calculateWaitTime(dptDate, dptTime, arrDate, arrTime) {
+        const toMinutes = (dateStr, timeStr) => {
+            const year = parseInt(dateStr.slice(0, 4), 10);
+            const month = parseInt(dateStr.slice(4, 6), 10) - 1;
+            const day = parseInt(dateStr.slice(6, 8), 10);
+            const hour = parseInt(timeStr.slice(0, 2), 10);
+            const minute = parseInt(timeStr.slice(2, 4), 10);
+
+            return new Date(year, month, day, hour, minute).getTime() / 60000;
+        };
+
+        const dptMinutes = toMinutes(dptDate, dptTime);
+        const arrMinutes = toMinutes(arrDate, arrTime);
+
+        const diffMinutes = arrMinutes - dptMinutes;
+
+        if (isNaN(diffMinutes) || diffMinutes < 0) return '시간 계산 오류';
+
+        const hours = Math.floor(diffMinutes / 60).toString().padStart(2, '0');
+        const minutes = (diffMinutes % 60).toString().padStart(2, '0');
+
+        return `${hours}시간 ${minutes}분`;
+    }
+
+    function render() {
+        const cardWrap = document.querySelector('.card-wrap');
+
+        cardWrap.innerHTML = flights.map((flight,idx) => `
+        <div class="card ${idx === 0 || flight.itinno !== flights[idx - 1].itinno ? '' : 'card-tra'}">
+            ${idx === 0 || flight.itinno !== flights[idx - 1].itinno ? `
+              <div class="card-header">
+                <div class="info-header">
+                  <span>여정${flight.itinno}</span>
+                  <p>${flight.depcitynm} (${flight.depairportcd}) -> ${flight.arrcitynm} (${flight.arrairportcd})</p>
+                </div>
+                <p>${calculateWaitTime(flight.depdate, flight.deptm, flight.arrdate, flight.arrtm)}</p>
+              </div>
+            ` : `
+                <div class="card-temp">
+                  <div class="line"></div>
+                  <p>${calculateWaitTime(flights[idx-1].arrdate, flights[idx-1].arrtm,flight.depdate, flight.deptm)} 대기 ${flight.depcitynm}</p>
+                </div>
+            `}
+            <div class="card-body">
+                <div class="card-left">
+                    <p>${flight.airnm} ${flight.fltno.toString().padStart(4,'0')} </p>
+                    ${flight.codeshare !== '' ? `<span>실제 탑승::${flight.codesharenm}</span>`: ''}
+                </div>
+                <div class="card-right">
+                    <p>${formatDate(flight.depdate)}</p>
+                    <div class="info">
+                        <p class="place"><b>${flight.deptm}</b> ${flight.depcitynm}</p>
+                        <p class="time">${calculateWaitTime(flight.depdate, flight.deptm, flight.arrdate, flight.arrtm)}</p>
+                        <p class="seat">${flight.cabinclassnm} / 무료위탁 수하물 (1인) ${flight.baggageinfo}</p>
+                        <p class="place"><b>${flight.arrtm}</b> ${flight.arrcitynm}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    }
+
+    render();
 </script>
 </html>
