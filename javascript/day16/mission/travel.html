@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Travel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f7f9fc;
+            color: #2c3e50;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 40px 0;
+            font-size: 28px;
+            color: #34495e;
+        }
+        .card {
+            width: 100%;
+            max-width: 1000px;
+        }
+        .card-wrap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .card .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .info-header {
+                display: flex;
+                align-items: center;
+
+                span {
+                    padding: 2px 4px;
+                    border-radius: 3px;
+                    background-color: #4a90e2;
+                    font-size: 14px;
+                    color: white;
+                }
+                p {
+                    margin-left: 10px;
+                    font-size: 18px;
+                }
+            }
+        }
+        .card .card-body {
+            display: flex;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: white;
+
+            .card-left {
+                p {
+                    font-size: 14px;
+                }
+
+                span {
+                    display: block;
+                    margin-top: 5px;
+                    padding: 3px;
+                    background-color: #ccc;
+                    font-size: 10px;
+                }
+            }
+
+            .card-right {
+                margin-left: 100px;
+                display: flex;
+
+                .place::before {
+                    content: "";
+                    width: 10px;
+                    height: 10px;
+                    border: 1px solid #ccc;
+                    border-radius: 50%;
+                    margin-right: 10px;
+                }
+
+                .info {
+                    margin-left: 30px;
+                }
+
+                .time {
+                    margin-top: 10px;
+                    font-size: 14px;
+                    color: #555;
+                }
+
+                .seat {
+                    margin: 10px 0;
+                    font-weight: bold;
+                    font-size: 14px;
+                    color: #555;
+                }
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>🌴 항공 스케줄 표</h1>
+</header>
+<main>
+    <div class="card-container">
+        <div class="card-wrap">
+            <div class="card">
+                <div class="card-header">
+                    <div class="info-header">
+                        <span>여정1</span>
+                        <p>서울 -> 로스앤젤레스</p>
+                    </div>
+                    <p>11시간 00분</p>
+                </div>
+                <div class="card-body">
+                    <div class="card-left">
+                        <p>유나이티드 항공</p>
+                        <span>실제 탑승::텔타항공</span>
+                    </div>
+                    <div class="card-right">
+                        <p>1월 29일</p>
+                        <div class="info">
+                            <p class="place"><b>19:10</b> 샌프란시스코 SFO</p>
+                            <p class="time">01시간 33분</p>
+                            <p class="seat">일반석 / 무료위탁 수하물 (1인) 2개</p>
+                            <p class="place"><b>20:43</b> 라스베이거스 LAS</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+<script>
+    const flights = [
+      {
+        "itinno": "1",
+        "segno": "1",
+        "aircd": "KE",
+        "airnm": "대한항공",
+        "fltno": "17",
+        "depcitynm": "서울",
+        "depairportnm": "인천",
+        "depdate": "20251201",
+        "deptm": "1430",
+        "arrcitynm": "로스앤젤레스",
+        "arrairportcd": "LAX",
+        "arrdate": "20251201",
+        "arrtm": "0830",
+        "bookingclass": "Y",
+        "cabinclassnm": "일반석",
+        "baggageinfo": "2개",
+        "codeshare": "",
+        "codesharenm": ""
+      },
+      {
+        "itinno": "2",
+        "segno": "1",
+        "aircd": "UA",
+        "airnm": "유나이티드항공",
+        "fltno": "391",
+        "depcitynm": "로스앤젤레스",
+        "depdate": "20251231",
+        "deptm": "0721",
+        "arrcitynm": "샌프란시스코",
+        "arrdate": "20251231",
+        "arrtm": "0848",
+        "bookingclass": "Q",
+        "cabinclassnm": "일반석",
+        "baggageinfo": "2개",
+        "codeshare": "",
+        "codesharenm": ""
+      },
+      {
+        "itinno": "3",
+        "segno": "1",
+        "aircd": "UA",
+        "airnm": "유나이티드항공",
+        "fltno": "1995",
+        "depcitynm": "샌프란시스코",
+        "depdate": "20260129",
+        "deptm": "1910",
+        "arrcitynm": "라스베이거스",
+        "arrdate": "20260129",
+        "arrtm": "2043",
+        "bookingclass": "Q",
+        "cabinclassnm": "일반석",
+        "baggageinfo": "2개",
+        "codeshare": "",
+        "codesharenm": ""
+      },
+      {
+        "itinno": "4",
+        "segno": "1",
+        "aircd": "KE",
+        "airnm": "대한항공",
+        "fltno": "7532",
+        "depcitynm": "라스베이거스",
+        "depdate": "20260227",
+        "deptm": "1950",
+        "arrcitynm": "로스앤젤레스",
+        "arrdate": "20260227",
+        "arrtm": "2110",
+        "bookingclass": "Y",
+        "cabinclassnm": "일반석",
+        "baggageinfo": "2개",
+        "codeshare": "DL",
+        "codesharenm": "델타항공"
+      },
+      {
+        "itinno": "4",
+        "segno": "2",
+        "aircd": "KE",
+        "airnm": "대한항공",
+        "fltno": "12",
+        "depcitynm": "로스앤젤레스",
+        "depdate": "20260227",
+        "deptm": "2240",
+        "arrcitynm": "서울",
+        "arrairportnm": "인천",
+        "arrdate": "20260301",
+        "arrtm": "0450",
+        "bookingclass": "Y",
+        "cabinclassnm": "일반석",
+        "baggageinfo": "2개",
+        "codeshare": "",
+        "codesharenm": ""
+      }
+    ]
+
+</script>
+</html>

@@ -134,17 +134,24 @@
     // 사용자 응답을 반복하며 해당 지표의 점수 증가
     // 객체 재구성을 위해 entries → fromEntries 사용
     // 각 항목별 점수 비교 후 MBTI 4자리 문자열 생성
-    const result = [];
+    /*let result = [];
     Object.entries(score).forEach(([key,value]) => {
       if(value === 1) result.push([key,true]);
-    });
+    });*/
+
+    /*
+    ✅ forEach는 항상 undefined를 반환하기 때문입니다.
+    ✅ forEach는 반복만 할 뿐 리턴값을 누적하거나 반환하지 않습니다.
+    ✅ 콜백 함수 내에서 return을 해도, forEach는 이를 무시합니다.
+    */
+    let result = Object.entries(score)
+      .filter(([_, value]) => value)
+      .map(([key]) => [key, true]);
 
     const resultObject = Object.fromEntries(result);
 
-    let resultP = ''
-    Object.entries(resultObject).forEach(([key,value]) => {
-      resultP += key
-    });
+    let resultP = '';
+    Object.entries(resultObject).forEach(([key,_]) => resultP += key);
     resultEl.textContent = `당신의 MBTI는 ${resultP} 입니다!`
 
    /* let result = '';
@@ -158,7 +165,82 @@
   }
   renderQuestions();
 </script>
+<!--<script>
+  const QUESTIONS = {
+    q1: { text: '고등학교에서 유명했나요?', a: 'E', b: 'I' },
+    q2: { text: '운동(스포츠)를 하나요?', a: 'S', b: 'N' },
+    q3: { text: '수학을 잘하나요?', a: 'T', b: 'F' },
+    q4: { text: '지금 방이 깨끗한가요?', a: 'J', b: 'P' },
+  };
+  const MBTI_TYPES = [
+    ['E', 'I'],
+    ['S', 'N'],
+    ['T', 'F'],
+    ['J', 'P'],
+  ];
 
+  const answers = {};
+  const quizEl = document.getElementById('quiz');
+  const resultEl = document.getElementById('result');
+
+  // 점수 계산 함수
+  const calculateScore = (answers) => {
+    const score = Object.fromEntries(MBTI_TYPES.flat().map((key) => [key, 0]));
+    Object.values(answers).forEach((type) => score[type]++);
+    return score;
+  };
+
+  // MBTI 계산 함수
+  const calculateMBTI = (score) => MBTI_TYPES.map(([a, b]) => (score[a] >= score[b] ? a : b)).join('');
+
+  //  결과 출력 함수
+  function showResult(questionKey, selectedValue) {
+    answers[questionKey] = selectedValue;
+
+    const isComplete = Object.keys(answers).length === Object.keys(QUESTIONS).length;
+    if (!isComplete) return;
+
+    const score = calculateScore(answers);
+    const mbti = calculateMBTI(score);
+
+    resultEl.textContent = `🧬 당신의 MBTI는: ${mbti}`;
+  }
+
+  // 옵션 생성 함수
+  function createOption(key, value, labelText) {
+    // Object.assign 여러 객체를 하나로 병합하여 원본 객체를 손상시키지 않도록 새로운 객체를 생성한다.
+    const option = Object.assign(document.createElement('div'), { className: 'option' });
+    const input = Object.assign(document.createElement('input'), {
+      type: 'radio',
+      id: `${key}_${value}`,
+      name: key,
+      value,
+    });
+    const label = Object.assign(document.createElement('label'), {
+      htmlFor: input.id,
+      textContent: labelText,
+    });
+
+    input.addEventListener('change', () => showResult(key, value));
+    option.append(input, label);
+
+    return option;
+  }
+
+  // 질문 렌더링 함수
+  function renderQuestions() {
+    Object.entries(QUESTIONS).forEach(([key, { text, a, b }]) => {
+      const questionWrapper = Object.assign(document.createElement('div'), { className: 'question' });
+      const questionText = Object.assign(document.createElement('p'), { textContent: text });
+      const optionsDiv = Object.assign(document.createElement('div'), { className: 'options' });
+
+      optionsDiv.append(createOption(key, a, 'YES'), createOption(key, b, 'NO'));
+      questionWrapper.append(questionText, optionsDiv);
+      quizEl.appendChild(questionWrapper);
+    });
+  }
+
+  renderQuestions();
+</script>-->
 </body>
-
 </html>

@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Domestic Flights</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f7f9fc;
+            color: #2c3e50;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 40px 0;
+            font-size: 28px;
+            color: #34495e;
+        }
+
+        .card-container {
+            margin-top: 20px;
+        }
+
+        .card-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 640px;
+            padding: 24px 28px;
+            border-radius: 12px;
+            background-color: #fff;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-common {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header {
+            margin-bottom: 12px;
+        }
+
+        .card-header .airline {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .card-header .seat {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            background-color: #3498db;
+            color: white;
+            font-weight: 500;
+        }
+
+        .card-body {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .card-body p {
+            margin: 4px 0;
+        }
+
+        .card-footer {
+            font-size: 14px;
+            color: #7f8c8d;
+            flex-wrap: wrap;
+        }
+
+        .card-footer p {
+            margin: 4px 0;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>🌴 국내선 항공 스케줄 표</h1>
+</header>
+<main>
+    <div class="card-container">
+        <div class="card-wrap">
+        </div>
+    </div>
+</main>
+</body>
+<script>
+  const flightData = [
+    {
+      airline: "에어서울",
+      flightNumber: "901",
+      departure: "김포 (GMP)",
+      departureTime: "2025-09-16 06:00",
+      arrival: "제주 (CJU)",
+      arrivalTime: "2025-09-16 07:15",
+      cabinClass: "할인석",
+      seatStatus: "HK"
+    },
+    {
+      airline: "진에어",
+      flightNumber: "516",
+      departure: "제주 (CJU)",
+      departureTime: "2025-09-27 21:15",
+      arrival: "김포 (GMP)",
+      arrivalTime: "2025-09-27 22:30",
+      cabinClass: "할인석",
+      seatStatus: "HK"
+    }
+  ];
+
+  function render () {
+    const cardWrap = document.querySelector('.card-wrap');
+
+    flightData.forEach(flight => {
+      const card = document.createElement('div');
+      card.classList.add("card");
+
+      card.innerHTML = `
+        <div class="card-header card-common">
+            <h2 class="airline">${flight.airline} ${flight.flightNumber}</h2>
+            <span class="seat">${flight.seatStatus}</span>
+        </div>
+        <div class="card-body card-common">
+            <p class="departure"><b>출발 : </b>${flight.departure} ${flight.departureTime}</p>
+            <p class="arrival"><b>도착 : </b>${flight.arrival} ${flight.arrivalTime}</p>
+        </div>
+        <div class="card-footer card-common">
+            <p class="cabin">좌석: ${flight.cabinClass}</p>
+            <p class="number">항공편 : ${flight.flightNumber}</p>
+        </div>
+      `
+
+      cardWrap.appendChild(card);
+    })
+  }
+
+  render();
+</script>
+</html>

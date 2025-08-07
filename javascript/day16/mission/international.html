@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>International Flights</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        h1 {
+            padding: 40px 0;
+            font-size: 32px;
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        .card-container {
+            margin-top: 20px;
+        }
+
+        .card-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        .card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 800px;
+            padding: 24px 32px;
+            border-radius: 12px;
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-header {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .card-body {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 6px;
+        }
+
+        .card-footer {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .card-right {
+            margin-left: 24px;
+        }
+
+        .card-right button {
+            padding: 8px 10px;
+            border: none;
+            border-radius: 6px;
+            background-color: #4a90e2;
+            font-size: 14px;
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .card-right button:hover {
+            background-color: #357ab8;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>🌴 국제선 항공 스케줄 표</h1>
+</header>
+<main>
+    <div class="card-container">
+        <div class="card-wrap">
+        </div>
+    </div>
+</main>
+</body>
+<script>
+  const flights = [
+    {
+      airnm: "대한항공",
+      fltno: "17",
+      depcity: "서울",
+      depairport: "ICN",
+      depdate: "2025-12-01",
+      deptm: "14:30",
+      arrcity: "로스앤젤레스",
+      arrairport: "LAX",
+      arrdate: "2025-12-01",
+      arrtm: "08:30",
+      cabinclass: "일반석",
+      baggage: "2개"
+    },
+    {
+      airnm: "유나이티드항공",
+      fltno: "391",
+      depcity: "로스앤젤레스",
+      depairport: "LAX",
+      depdate: "2025-12-31",
+      deptm: "07:21",
+      arrcity: "샌프란시스코",
+      arrairport: "SFO",
+      arrdate: "2025-12-31",
+      arrtm: "08:48",
+      cabinclass: "일반석",
+      baggage: "2개"
+    },
+    {
+      airnm: "유나이티드항공",
+      fltno: "1995",
+      depcity: "샌프란시스코",
+      depairport: "SFO",
+      depdate: "2026-01-29",
+      deptm: "19:10",
+      arrcity: "라스베이거스",
+      arrairport: "LAS",
+      arrdate: "2026-01-29",
+      arrtm: "20:43",
+      cabinclass: "일반석",
+      baggage: "2개"
+    },
+    {
+      airnm: "대한항공",
+      fltno: "6",
+      depcity: "라스베이거스",
+      depairport: "LAS",
+      depdate: "2026-02-27",
+      deptm: "22:50",
+      arrcity: "서울",
+      arrairport: "ICN",
+      arrdate: "2026-03-01",
+      arrtm: "05:20",
+      cabinclass: "일반석",
+      baggage: "2개"
+    }
+  ];
+
+  function render() {
+    const cardWrap = document.querySelector('.card-wrap');
+
+    cardWrap.innerHTML = flights.map(flight => `
+        <div class="card">
+          <div class="card-left">
+            <div class="card-header">${flight.depcity}(${flight.depairport}) -> ${flight.arrcity}(${flight.arrairport})</div>
+            <div class="card-body">✈️ ${flight.airnm} | ${flight.depdate} ${flight.deptm} 출발 -> ${flight.arrdate} ${flight.arrtm} 도착</div>
+            <div class="card-footer">💺 ${flight.cabinclass} | 💼 ${flight.baggage}</div>
+          </div>
+          <div class="card-right">
+            <button>예약 가능</button>
+          </div>
+        </div>
+    `).join('');
+  }
+
+  render();
+</script>
+</html>
