@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        input { display: block; margin: 10px 0; padding: 6px; width: 300px; }
+        .info-box { margin-top: 20px; padding: 10px; border: 1px solid #ccc; background: #f9f9f9; }
+        .info-box h3 { margin-top: 0; }
+    </style>
+</head>
+<body>
+<div id="app"></div>
+</body>
+<script>
+    const user = {
+      id: 101,
+      name: '총명',
+      email: 'chdaudn@example.com',
+      role: 'admin',
+      createdAt: '2025-08-08'
+    }
+
+    function renderUserForm({name,email, ...rest}) {
+      const form = document.createElement('form');
+
+      form.appendChild(createInput({label: '이름', value: name, name: 'name'}));
+      form.appendChild(createInput({label: '이메일', value: email, name: 'email'}));
+
+      const infoBox = document.createElement('div');
+      infoBox.className = 'info-box';
+
+      const title = document.createElement('h3');
+      title.textContent = '추가 정보';
+
+      infoBox.appendChild(title);
+
+      for (const [key, value] of Object.entries(rest)) {
+        const p = document.createElement('p');
+        p.textContent = `${key}: ${value}`;
+        infoBox.appendChild(p);
+      }
+
+      // 화면에 추가
+      const app = document.getElementById('app');
+      app.appendChild(form);
+      app.appendChild(infoBox);
+    }
+
+    function createInput({ label, ...inputProps }) {
+      const labelEl = document.createElement('label');
+      labelEl.textContent = label;
+
+      const inputEl = document.createElement('input');
+      Object.assign(inputEl, inputProps); // spread 사용
+
+      const container = document.createElement('div');
+      container.appendChild(labelEl);
+      container.appendChild(inputEl);
+
+      return container;
+    }
+
+    // 렌더링 실행
+    renderUserForm(user);
+</script>
+</html>
