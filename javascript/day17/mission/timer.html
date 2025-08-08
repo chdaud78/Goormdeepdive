@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Timer</title>
+    <style>
+        * {
+            margin : 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            background: linear-gradient(135deg, #ffe6f0, #ffc0d3, #ff9fc2, #ff7ba9);
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 0.3em;
+            color: #a32955;
+            text-shadow:
+                    0 0 8px #a32955,
+                    0 0 20px #c7547a,
+                    0 0 30px #bf5275,
+                    0 0 40px #a32955,
+                    0 0 50px #c7547a;
+        }
+        .time {
+            font-size: 5rem;
+            font-weight: 900;
+            color: #ff7ba9;
+            text-shadow:
+                    0 0 10px #ff467e,
+                    0 0 25px #ff2a5a,
+                    0 0 40px #ff1450;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.3em;
+        }
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            margin-bottom: 0.6em;
+            font-weight: 600;
+        }
+        .status {
+            font-size: 1.6rem;
+            margin-bottom: 1.5em;
+            font-weight: bold;
+        }
+        .status.resting {
+            color: #d81b60;
+            text-shadow:
+                    0 0 10px #d81b60,
+                    0 0 20px #ad1457,
+                    0 0 30px #880e4f;
+        }
+        .status.working {
+            color: #7b1fa2;
+            text-shadow:
+                    0 0 10px #7b1fa2,
+                    0 0 20px #6a1b9a,
+                    0 0 30px #4a148c;
+        }
+        button {
+            color: white;
+            cursor: pointer;
+            padding: 0.8em 2em;
+            font-size: 1.1rem;
+            border: none 0;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #f48fb1, #d81b60);
+        }
+        audio {
+            position: absolute;
+            bottom: 30px;
+        }
+        .cherry {
+            position: fixed;
+            top: -100px;
+            width: 30px;
+            height: 30px;
+            background-image: url('./WEB.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.8;
+            animation-name: fall;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+        @keyframes fall {
+            from {
+                transform: translateY(-50px) rotate(0);
+                opacity: 0.8;
+            }
+            to {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>🌸 벚꽃 만개 정각 타이머 🌸</h1>
+    <div class="time">--:--:--</div>
+    <div class="countdown">다음 휴식까지: <p class="count-time">--:--:--</p></div>
+    <div class="status working">쉬는 시간 종료! 열공합시다.</div>
+    <button id="stopAlarm" class="stop">알람 정지</button>
+    <audio id="audio" src="./banana.mp3" preload="auto" controls="1"></audio>
+    <div class="cherry-container"></div>
+</body>
+<script>
+  const timeDisplay = document.querySelector('.time');
+  const countdownDisplay = document.querySelector('.count-time');
+  const statusDisplay = document.querySelector('.status');
+  const stopAlarm = document.getElementById('stopAlarm');
+  const audio = document.getElementById('audio');
+  const cherryContainer = document.querySelector('.cherry-container');
+
+  // 벚꽃잎 생성
+  function makeCherry () {
+    const cherry = document.createElement('div');
+    cherry.classList.add('cherry');
+
+    cherry.style.left = Math.random() * window.innerWidth + 'px';
+    cherry.style.animationDuration = (5 + Math.random() * 5) + 's';
+    cherry.style.animationDelay = Math.random() * 10 + 's';
+    cherry.style.width = (20 + Math.random() * 20) + 'px';
+    cherry.style.height = (20 + Math.random() * 20) + 'px';
+
+    cherryContainer.appendChild(cherry);
+
+    setTimeout(() => {
+      cherry.remove();
+    }, 15000);
+  }
+
+  let petalInterval = null;
+  function startCherry() {
+    if (petalInterval) return;
+    petalInterval = setInterval(makeCherry, 200);
+  }
+  function stopCherry() {
+    clearInterval(petalInterval);
+    petalInterval = null;
+  }
+
+  function audioStop() {
+    audio.pause();
+    audio.currentTime = 0;
+  }
+
+  function updateStatus (check) {
+    if(check) {
+      statusDisplay.textContent = '쉬는시간! 열심히 쉬고 옵시다.';
+      statusDisplay.classList.remove('working');
+      statusDisplay.classList.add('resting');
+      startCherry();
+    } else {
+      statusDisplay.textContent = '공부시간! 열심히 공부합시다.';
+      statusDisplay.classList.remove('resting');
+      statusDisplay.classList.add('working');
+      stopCherry();
+    }
+  }
+
+  function nextBreakTime(minute) {
+    const now = new Date();
+    let next = new Date(now);
+
+    if (now.getMinutes() >= minute) {
+      next.setHours(now.getHours() + 1);
+    }
+    next.setMinutes(minute);
+    next.setSeconds(0);
+    next.setMilliseconds(0);
+
+    return next;
+  }
+
+  function formatTime (time) {
+    const total = Math.floor(time / 1000);
+    const h = String(Math.floor(total / 3600)).padStart(2, '0');
+    const m = String(Math.floor((total % 3600) / 60)).padStart(2, '0');
+    const s = String(total % 60).padStart(2, '0');
+    
+    return `${h}:${m}:${s}`
+  }
+
+  function updateTimer (minute = 10) {
+    const now = new Date();
+    const time = new Date().toLocaleTimeString("ko-KR", {hour12: false});
+    const m = now.getMinutes();
+    const s = now.getSeconds();
+
+    let next = nextBreakTime(minute);
+    const diff = next - now;
+
+    if(m === minute && s === 0) {
+      audio.play();
+    }
+    if(m === minute + 10 && s === 0) {
+      audioStop();
+    }
+
+    if(m >= minute && m <= minute + 10) {
+      updateStatus(true);
+    } else {
+      updateStatus(false);
+    }
+
+    countdownDisplay.textContent = formatTime(diff);
+    timeDisplay.textContent = time;
+  }
+
+  function render() {
+    setInterval(updateTimer, 1000);
+  }
+
+  stopAlarm.addEventListener('click', () => {
+    audioStop();
+  })
+
+  render();
+</script>
+</html>
