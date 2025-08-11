@@ -9,6 +9,11 @@
     li {
       list-style: none;
     }
+    * {
+     padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
     :root {
       --bg: #0b0c10;
       --fg: #eaf0f1;
@@ -93,6 +98,11 @@
       border-width: 1px;
       border-style: solid;
       border-color: var(--fg)
+    }
+    .tag.selected {
+      background-color: var(--accent);
+      color: white;
+      border-color: var(--accent);
     }
 
     .actions {
@@ -197,97 +207,296 @@
   <div id="toast-root"></div>
 
   <script>
+    /* =========================
+              유틸 함수
+    ========================= */
     const uid = () =>
-      (crypto.randomUUID?.() /* 브라우저가 randomUUID 지원 시 */
-        || (Date.now() + Math.random().toString(16).slice(2)));
+        (crypto.randomUUID?.() /* 브라우저가 randomUUID 지원 시 */
+            || (Date.now() + Math.random().toString(16).slice(2)));
 
-    const clamp = (s) => s.trim(); // 앞뒤 공백 제거(텍스트 정리)
+    // XSS 방지
+    const escapeHtml = s =>
+        s.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
 
+    // 앞뒤 공백 제거(텍스트 정리)
+    const clamp = (s) => s.trim();
+
+    // Tag 분리
     const tagSplit = (s) => s.split(',').map(x => x.trim()).filter(x => x !== '');
 
-    const addItem = (list, title, url, tags) =>
-      title.trim()
-        ? [{ id: uid(), title: clamp(title), url: clamp(url), tags: tagSplit(tags), createdAt: new Date()}, ...list] // 새 배열 반환
-        : list; // 공백이면 원본 유지
-
-    const removeItem = (list, id) =>
-      list.filter(x => x.id !== id)
-
-    /* =========================
-     상태 (항상 불변 업데이트)
-    ========================= */
-    let items = [];
-    let filter = {};
-
-    /* =========================
-     화면 구성 UI
-    ========================= */
-
-    // 테마
-    function themeRender() {
-      const themeBtn = document.getElementById('theme-btn');
-      document.body.classList.toggle('light', localStorage.getItem('theme') ===
-      '1');
-
-      themeBtn.addEventListener('click', () => {
-        const isLight = document.body.classList.toggle('light');
-        localStorage.setItem('theme', isLight ? '1' : '0');
-      })
+    // url 확인
+    const isValidUrl = (url)  => {
+      const pattern = /^(https?:\/\/)?([\w.-]+)+(:\d+)?(\/[\w./?%&=-]*)?$/i;
+      return pattern.test(url);
     }
 
-    themeRender();
+    /* =========================
+              토스트
+    ========================= */
+    const $toastRoot = document.getElementById('toast-root');
 
-    $list = document.querySelector('#list');
+    function createToast(message, duration = 3000) {
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = message;
+
+      $toastRoot.appendChild(toast);
+
+      const timer = setTimeout(() => {
+        toast.remove();
+      }, duration);
+
+      toast.addEventListener('click', () => {
+        clearTimeout(timer);
+        toast.remove();
+      });
+    }
+
+    /* =========================
+              상태 관리
+    ========================= */
+    class Store {
+      #storageKey = 'bookmark';
+
+      constructor(initialState) {
+        this.state = initialState;
+        this.listeners = new Set();
+        this.load();
+      }
+
+      get() {return this.state;}
+
+      set(updater) {
+        this.state = updater(this.state);
+        this.save();
+        this.emit();
+      }
+
+      subscribe(listener) {
+        this.listeners.add(listener);
+        return () => this.listeners.delete(listener);
+      }
+
+      emit() {
+        for (const fn of this.listeners) fn(this.state);
+      }
+
+      filtered() {
+        const {items, filter} = this.state;
+        let copyItems = [...items]
+
+        // 검색 필터
+        if(filter.q) {
+          let q = filter.q.toLowerCase();
+          copyItems = copyItems.filter(copyItem =>
+              copyItem.title.toLowerCase().includes(q) ||
+              copyItem.tags.some(tag => tag.toLowerCase().includes(q))
+          );
+        }
+
+        // 태그 필터
+        if(filter.selected.size > 0) {
+          copyItems = copyItems.filter(copyItem =>
+              copyItem.tags.some(tag => filter.selected.has(tag))
+          );
+        }
+
+        // 정렬
+        let sorted = filter.sort;
+        sorted === 'recent' ?
+            copyItems.sort((a,b) => b.createdAt - a.createdAt) :
+        sorted === 'title' ?
+            copyItems.sort((a,b) => a.title.localeCompare(b.title)) :
+        sorted === 'tags' ?
+            copyItems.sort((a,b) => b.tags.length - a.tags.length) :
+            copyItems
+
+        return copyItems;
+      }
+
+      save() {
+        const saveData = {
+          ...this.state,
+          filter: {...this.state.filter, selected: [...this.state.filter.selected]}
+        }
+        localStorage.setItem(this.#storageKey,JSON.stringify(saveData));
+      }
+
+      load() {
+        const saved = localStorage.getItem(this.#storageKey);
+        if(!saved) return
+        try {
+          const result = JSON.parse(saved);
+          result.filter.selected = new Set(result.filter.selected);
+          this.state = result;
+        } catch {}
+      }
+    }
+
+    /* =========================
+          초기 상태 & 스토어
+    ========================= */
+    const initialState = {
+      items: [],
+      filter : {
+        q: '',
+        selected: new Set(),
+        sort : 'recent',
+      }
+    }
+    const store = new Store(initialState);
+    store.subscribe(render);
+
+    /* =========================
+                랜더
+    ========================= */
+    const $list = document.getElementById('list');
+    const $stats = document.getElementById('stats');
 
     function render() {
-      // 항목 그리기
-      $list.innerHTML = items.map(item => (`
-        <div class="card" data-id="${item.id}">
-          <h3>${item.title}</h3>
-          <p>${item.url}</p>
-          <ul class="tags">
-            ${item.tags.map(tag => (`
-              <li class="tag">${tag}</li>
-            `)).join('')}
-          </ul>
-          <button class="delete-btn">삭제</button>
-        </div>
-      `)).join('');
+      // list 그리기
+      const items = store.filtered();
+      const state = store.get();
 
-      // 삭제 버튼 이벤트
-      $list.addEventListener('click', (e) => {
-        if(e.target.closest('.delete-btn')) {
-          const card = e.target.closest('.card');
-          const id = card.dataset.id;
-          items = removeItem(items, id);
-          render();
-        }
-      })
+      $list.innerHTML = items.map(item => `
+        <div class="card">
+          <h3>${escapeHtml(item.title)}</h3>
+          ${isValidUrl(item.url) ?
+            `<a href="${escapeHtml(item.url)}" target="_blank" rel="noreferrer">${escapeHtml(item.url)}</a>` :
+            `<p>${escapeHtml(item.url)}</p>`}
+          <ul class="tags">
+            ${item.tags.map(tag => `
+              <li class="tag ${state.filter.selected.has(tag) ? 'selected' : ''}" data-tag="${escapeHtml(tag)}">${escapeHtml(tag)}</li>
+            `).join('')}
+          </ul>
+          <div class="actions">
+            <button data-del="${item.id}" data-title="${escapeHtml(item.title)}">삭제</button>
+          </div>
+        </div>
+      `).join('');
+
+      // 통계
+      const tagCount = new Map();
+
+      state.items.forEach(item => {
+        item.tags.forEach(tag => {
+          tagCount.set(tag, (tagCount.get(tag) || 0) + 1)
+        })
+      });
+
+      const topTags = [...tagCount.entries()]
+      .sort((a,b) => b[1]-a[1])
+      .slice(0,5)
+      .map(([tag, cnt]) => `#${escapeHtml(tag)}(${cnt}개)`);
+
+      $stats.innerHTML = `
+        <div>총 ${state.items.length}개<div>
+        <div>선택 태그 : ${[...state.filter.selected].map(escapeHtml).join(', ')}</div>
+        <div>TOP5 : ${topTags.join(',') || '없음'}</div>
+      `
     }
 
     /* =========================
-    이벤트 바인딩
+            이벤트 핸들링
     ========================= */
-
-    $formContainer = document.querySelector('#add-form');
-    $formContainer.addEventListener('submit', (e) => {
+    // 추가
+    document.getElementById('add-form').addEventListener('submit', (e) => {
       e.preventDefault();
-
-      const title = document.getElementById('title');
-      const url = document.getElementById('url');
-      const tags = document.getElementById('tags');
-
-      items = addItem(items, title.value, url.value, tags.value)
-
-      title.value = '';
-      url.value = '';
-      tags.value = '';
-
-      console.log(items);
-      render();
+      const title = clamp(document.getElementById('title').value);
+      if(!title) return;
+      const url = clamp(document.getElementById('url').value);
+      const tags = tagSplit(document.getElementById('tags').value);
+      const item = {
+        id: uid(),
+        title,
+        url,
+        tags,
+        createdAt : Date.now(),
+      }
+      store.set(state => ({
+        ...state,
+        items: [...state.items, item]
+      }));
+      e.target.reset();
+      createToast(`"${title}" 추가됨`);
     });
 
+    // 삭제 및 태그 클릭
+    $list.addEventListener('click', (e) => {
+      const delId = e.target.dataset.del;
+      if(delId) {
+        store.set(state => ({
+          ...state,
+          items : state.items.filter(item => item.id !== delId)
+        }));
+        const title = e.target.dataset.title;
+        createToast(`"${title}"가 삭제되었습니다.`);
+      }
 
+      const tag = e.target.dataset.tag;
+      if(tag) {
+        store.set(state => {
+          const selected = new Set(state.filter.selected);
+          console.log(selected);
+          if(selected.has(tag)) selected.delete(tag);
+          else selected.add(tag);
+          return {...state, filter: {...state.filter, selected}}
+        })
+      }
+    })
+
+    // 검색
+    let timer = null;
+    document.getElementById('q').addEventListener('input', (e) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        const q = e.target.value;
+        store.set(state => ({
+          ...state,
+          filter: {...state.filter, q}
+        }));
+      }, 300)
+    });
+
+    // 정렬
+    document.getElementById('sort').addEventListener('change',(e) => {
+      const sort = e.target.value;
+      store.set(state => ({
+        ...state,
+        filter: {...state.filter, sort}
+      }));
+    })
+
+    // 필터 초기화
+    document.getElementById('clear-filters').addEventListener('click', () => {
+      store.set(state => ({
+        ...state,
+        filter: {q: "", selected: new Set(), sort: "recent"}
+      }));
+      document.getElementById('q').value = '';
+      document.getElementById('sort').value = 'recent';
+      createToast('필터가 초기화되었습니다.');
+    });
+
+    /* =========================
+                UI
+    ========================= */
+    document.getElementById('theme-btn').addEventListener('click', () => {
+      document.body.classList.toggle('light');
+      localStorage.setItem('theme-light', document.body.classList.contains('light') ? '1' : '0');
+    });
+
+    /* =========================
+              초기 렌더
+    ========================= */
+    // 초기 UI
+    if (localStorage.getItem('theme-light') === '1') {
+      document.body.classList.add('light');
+    }
+    // 검색, 정렬 필터 초기 세팅
+    document.getElementById('sort').value = store.get().filter.sort;
+    document.getElementById('q').value = store.get().filter.q;
+    render();
   </script>
 </body>
 
