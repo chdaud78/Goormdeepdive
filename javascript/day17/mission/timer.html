@@ -105,13 +105,55 @@
                 opacity: 0;
             }
         }
+        .time-setting {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1em;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #a32955;
+        }
+        .time-setting label {
+            min-width: 150px;
+        }
+        .time-setting input {
+            width: 60px;
+            padding: 0.4em;
+            font-size: 1rem;
+            border: 2px solid #f48fb1;
+            border-radius: 8px;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .time-setting input:focus {
+            border-color: #d81b60;
+            box-shadow: 0 0 8px rgba(216, 27, 96, 0.5);
+        }
+        .time-setting button {
+            padding: 0.5em 1.2em;
+            font-size: 1rem;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #f48fb1, #d81b60);
+            color: white;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <h1>🌸 벚꽃 만개 정각 타이머 🌸</h1>
+    <h1>🌸 벚꽃 타이머 🌸</h1>
     <div class="time">--:--:--</div>
     <div class="countdown">다음 휴식까지: <p class="count-time">--:--:--</p></div>
     <div class="status working">쉬는 시간 종료! 열공합시다.</div>
+
+    <div class="time-setting">
+        <label for="breakMinute">휴식 시작 시각(분): </label>
+        <input type="number" id="breakMinute" min="0" max="59" value="50">
+        <button id="setMinute">변경</button>
+    </div>
+
     <button id="stopAlarm" class="stop">알람 정지</button>
     <audio id="audio" src="./banana.mp3" preload="auto" controls="1"></audio>
     <div class="cherry-container"></div>
@@ -123,6 +165,10 @@
   const stopAlarm = document.getElementById('stopAlarm');
   const audio = document.getElementById('audio');
   const cherryContainer = document.querySelector('.cherry-container');
+  const breakMinuteInput = document.getElementById('breakMinute');
+  const setMinuteBtn = document.getElementById('setMinute');
+
+  let breakMinute = 50; // 기본값
 
   // 벚꽃잎 생성
   function makeCherry () {
@@ -142,6 +188,7 @@
     }, 15000);
   }
 
+  // 벚꽃 시작/종료 함수
   let petalInterval = null;
   function startCherry() {
     if (petalInterval) return;
@@ -157,6 +204,7 @@
     audio.currentTime = 0;
   }
 
+  // 상태 변경 함수
   function updateStatus (check) {
     if(check) {
       statusDisplay.textContent = '쉬는시간! 열심히 쉬고 옵시다.';
@@ -171,6 +219,7 @@
     }
   }
 
+  // 다음 쉬는 시간 계산 함수
   function nextBreakTime(minute) {
     const now = new Date();
     let next = new Date(now);
@@ -185,6 +234,7 @@
     return next;
   }
 
+  // 시간 포맷 형식 변경
   function formatTime (time) {
     const total = Math.floor(time / 1000);
     const h = String(Math.floor(total / 3600)).padStart(2, '0');
@@ -194,23 +244,24 @@
     return `${h}:${m}:${s}`
   }
 
-  function updateTimer (minute = 10) {
+  // 타이머 업데이트 함수
+  function updateTimer () {
     const now = new Date();
     const time = new Date().toLocaleTimeString("ko-KR", {hour12: false});
     const m = now.getMinutes();
     const s = now.getSeconds();
 
-    let next = nextBreakTime(minute);
+    let next = nextBreakTime(breakMinute);
     const diff = next - now;
 
-    if(m === minute && s === 0) {
+    if(m === breakMinute && s === 0) {
       audio.play();
     }
-    if(m === minute + 10 && s === 0) {
+    if(m === breakMinute + 10 && s === 0) {
       audioStop();
     }
 
-    if(m >= minute && m <= minute + 10) {
+    if(m >= breakMinute && m <= breakMinute + 10) {
       updateStatus(true);
     } else {
       updateStatus(false);
@@ -224,9 +275,22 @@
     setInterval(updateTimer, 1000);
   }
 
+  // 알람 종료
   stopAlarm.addEventListener('click', () => {
     audioStop();
   })
+
+  // 변경 버튼 클릭 시
+  setMinuteBtn.addEventListener('click', () => {
+    let value = parseInt(breakMinuteInput.value, 10);
+    if(value >= 0 && value <= 59) {
+      breakMinute = value;
+      alert(`휴식 시작 시각을 ${breakMinute}분으로 변경했습니다.`);
+      updateTimer();
+    } else {
+      alert("0~59 사이의 숫자를 입력하세요.");
+    }
+  });
 
   render();
 </script>
