@@ -1,0 +1,294 @@
+<!Doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Tag Bookmark</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    li {
+      list-style: none;
+    }
+    :root {
+      --bg: #0b0c10;
+      --fg: #eaf0f1;
+      --muted: #9aa0a6;
+      --card: #11151a;
+      --accent: #4f8cff;
+    }
+
+    body {
+      margin: 0;
+      font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+    }
+
+    .bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid #222;
+    }
+
+    .controls {
+      display: grid;
+      gap: 8px;
+      padding: 12px 16px;
+      background: var(--card);
+      border-bottom: 1px solid #222;
+    }
+
+    #add-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: 8px;
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .grid {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      padding: 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid #1c2430;
+      border-radius: 12px;
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--card);
+      color: var(--muted);
+      cursor: pointer;
+      user-select: none;
+      border-width: 1px;
+      border-style: solid;
+      border-color: var(--fg)
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    button,
+    input,
+    select {
+      background: var(--card);
+      color: var(--fg);
+      border: 1px solid #273040;
+      border-radius: 8px;
+      padding: 8px;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .stats {
+      padding: 12px 16px;
+      border-top: 1px solid #222;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      color: var(--muted);
+    }
+
+    .light {
+      --bg: #f7f8fb;
+      --fg: #0b0c10;
+      --muted: #566;
+      --card: #ffffff;
+      --accent: #2a66ff;
+    }
+
+    .toast {
+      background: #111a;
+      backdrop-filter: blur(6px);
+      color: #fff;
+      padding: 10px 12px;
+      border-radius: 10px;
+    }
+
+    #toast-root {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      display: grid;
+      gap: 8px;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width:720px) {
+      #add-form {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="bar">
+    <h1>Tag Notes (Lite)</h1>
+    <div style="display:flex;gap:8px;">
+      <button type="button" id="theme-btn">🌓</button>
+    </div>
+  </header>
+
+  <section class="controls">
+    <form id="add-form" autocomplete="off">
+      <input id="title" placeholder="제목" required />
+      <input id="url" placeholder="링크(URL) 또는 메모" />
+      <input id="tags" placeholder="태그(쉼표로 구분)" />
+      <button type="submit">추가</button>
+    </form>
+
+    <div class="filters">
+      <input id="q" placeholder="검색(제목/태그) — 300ms 디바운스" />
+      <select id="sort">
+        <option value="recent">정렬: 최신</option>
+        <option value="title">정렬: 제목</option>
+        <option value="tags">정렬: 태그수</option>
+      </select>
+      <button type="button" id="clear-filters">필터 초기화</button>
+    </div>
+  </section>
+
+  <section class="grid" id="list"></section>
+  <aside class="stats" id="stats"></aside>
+  <div id="toast-root"></div>
+
+  <script>
+    const uid = () =>
+      (crypto.randomUUID?.() /* 브라우저가 randomUUID 지원 시 */
+        || (Date.now() + Math.random().toString(16).slice(2)));
+
+    const clamp = (s) => s.trim(); // 앞뒤 공백 제거(텍스트 정리)
+
+    const tagSplit = (s) => s.split(',').map(x => x.trim()).filter(x => x !== '');
+
+    const addItem = (list, title, url, tags) =>
+      title.trim()
+        ? [{ id: uid(), title: clamp(title), url: clamp(url), tags: tagSplit(tags), createdAt: new Date()}, ...list] // 새 배열 반환
+        : list; // 공백이면 원본 유지
+
+    const removeItem = (list, id) =>
+      list.filter(x => x.id !== id)
+
+    /* =========================
+     상태 (항상 불변 업데이트)
+    ========================= */
+    let items = [];
+    let filter = {};
+
+    /* =========================
+     화면 구성 UI
+    ========================= */
+
+    // 테마
+    function themeRender() {
+      const themeBtn = document.getElementById('theme-btn');
+      document.body.classList.toggle('light', localStorage.getItem('theme') ===
+      '1');
+
+      themeBtn.addEventListener('click', () => {
+        const isLight = document.body.classList.toggle('light');
+        localStorage.setItem('theme', isLight ? '1' : '0');
+      })
+    }
+
+    themeRender();
+
+    $list = document.querySelector('#list');
+
+    function render() {
+      // 항목 그리기
+      $list.innerHTML = items.map(item => (`
+        <div class="card" data-id="${item.id}">
+          <h3>${item.title}</h3>
+          <p>${item.url}</p>
+          <ul class="tags">
+            ${item.tags.map(tag => (`
+              <li class="tag">${tag}</li>
+            `)).join('')}
+          </ul>
+          <button class="delete-btn">삭제</button>
+        </div>
+      `)).join('');
+
+      // 삭제 버튼 이벤트
+      $list.addEventListener('click', (e) => {
+        if(e.target.closest('.delete-btn')) {
+          const card = e.target.closest('.card');
+          const id = card.dataset.id;
+          items = removeItem(items, id);
+          render();
+        }
+      })
+    }
+
+    /* =========================
+    이벤트 바인딩
+    ========================= */
+
+    $formContainer = document.querySelector('#add-form');
+    $formContainer.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const title = document.getElementById('title');
+      const url = document.getElementById('url');
+      const tags = document.getElementById('tags');
+
+      items = addItem(items, title.value, url.value, tags.value)
+
+      title.value = '';
+      url.value = '';
+      tags.value = '';
+
+      console.log(items);
+      render();
+    });
+
+
+  </script>
+</body>
+
+</html>
