@@ -1,3 +1,4 @@
+/*
 function greet(greeting, name) {
   console.log(`${greeting}, ${name}!  나는 ${this.role}입니다.`);
 }
@@ -26,4 +27,15 @@ user2.greet();
 const sayHello = user2.greet;
 const sayhello2 = user2.greet.bind(user2);
 sayHello();
-sayhello2();
+sayhello2();*/
+
+function counter() {
+  let count = 0;
+  return function() {
+    count++;
+    console.log(count);
+  };
+}
+const c= counter();
+c();
+c();
