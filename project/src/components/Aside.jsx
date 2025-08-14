@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link } from 'react-router-dom'
 
 export default function Aside() {
   return (
@@ -12,6 +12,9 @@ export default function Aside() {
         </li>
         <li className="hover:bg-gray-300 rounded px-2 py-1 cursor-pointer transition-colors">
           <Link to="/exchange">Exchange 보기</Link>
+        </li>
+        <li className="hover:bg-gray-300 rounded px-2 py-1 cursor-pointer transition-colors">
+          <Link to="/user">User 보기</Link>
         </li>
       </ul>
     </aside>
