@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.j
 import Button from '@/components/ui/myBtn.jsx'
 
 const Main = () => (
-  <div className="container">
+  <div>
     <Card>
       <CardHeader>
         <CardTitle>프로필</CardTitle>
