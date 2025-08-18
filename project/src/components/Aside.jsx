@@ -19,6 +19,9 @@ export default function Aside({ isOpen }) {
         <li className="hover:bg-gray-300 rounded px-2 py-1 cursor-pointer transition-colors">
           <Link to="/exchange">Exchange 보기</Link>
         </li>
+        <li className="hover:bg-gray-300 rounded px-2 py-1 cursor-pointer transition-colors">
+          <Link to="/user">User 보기</Link>
+        </li>
       </ul>
     </aside>
   )
