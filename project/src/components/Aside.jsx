@@ -1,8 +1,21 @@
-// Aside.jsx
+import { Calendar, Home, Inbox, Search } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
-export default function Aside({ isOpen, onClose }) {
-  return (
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarTrigger,
+} from '@/components/ui/sidebar'
+
+export default function Aside() {
+  /*return (
     <aside
       className={`
         fixed right-0 top-0 h-full w-64 bg-gray-200 shadow-lg p-4 text-gray-800
@@ -23,10 +36,61 @@ export default function Aside({ isOpen, onClose }) {
         </li>
       </ul>
 
-      {/* 닫기 버튼 */}
+      {/!* 닫기 버튼 *!/}
       <button onClick={onClose} className="mb-4 p-2 rounded bg-gray-300 hover:bg-gray-400">
         닫기
       </button>
     </aside>
+  )*/
+
+  // Menu items.
+  const items = [
+    {
+      title: 'Home',
+      url: '/',
+      icon: Home,
+    },
+    {
+      title: 'Exchange',
+      url: '/exchange',
+      icon: Inbox,
+    },
+    {
+      title: 'Todo',
+      url: '/todo',
+      icon: Calendar,
+    },
+    {
+      title: 'User',
+      url: '/user',
+      icon: Search,
+    },
+  ]
+
+  return (
+    <Sidebar side="right">
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {items.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <Link to={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+      <SidebarFooter>
+        <SidebarTrigger />
+      </SidebarFooter>
+    </Sidebar>
   )
 }

@@ -1,28 +1,27 @@
 // Layout.jsx
-import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 
 import Aside from '@/components/Aside.jsx'
 import Footer from '@/components/Footer.jsx'
 import Header from '@/components/Header.jsx'
+import { SidebarProvider } from '@/components/ui/sidebar.jsx'
 
 function Layout() {
-  const [isAsideOpen, setIsAsideOpen] = useState(false)
-
   return (
-    <div className="relative min-h-screen w-full bg-gray-100 flex flex-col">
+    <SidebarProvider side="right">
       {/* Header */}
-      <Header onToggleAside={() => setIsAsideOpen((prev) => !prev)} />
+      <div className="w-full flex flex-col min-h-screen">
+        <Header />
 
-      {/* Main */}
-      <main className="flex-1 p-6">
-        <Outlet />
-      </main>
+        {/* Main */}
+        <main className="p-4 flex-1">
+          <Outlet />
+        </main>
 
-      <Footer />
-
-      <Aside isOpen={isAsideOpen} onClose={() => setIsAsideOpen(false)} />
-    </div>
+        <Footer />
+      </div>
+      <Aside />
+    </SidebarProvider>
   )
 }
 
