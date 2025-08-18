@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search } from 'lucide-react'
+import { CircleDollarSignIcon, Home, ListTodoIcon, UserIcon } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import {
@@ -15,35 +15,6 @@ import {
 } from '@/components/ui/sidebar'
 
 export default function Aside() {
-  /*return (
-    <aside
-      className={`
-        fixed right-0 top-0 h-full w-64 bg-gray-200 shadow-lg p-4 text-gray-800
-        min-h-screen flex flex-col
-        transform transition-transform duration-300 z-50
-        ${isOpen ? 'translate-x-0' : 'translate-x-full'}
-      `}
-    >
-      <ul className="flex flex-col gap-3 flex-1">
-        <li className="hover:bg-gray-300 rounded px-2 py-1 transition-colors">
-          <Link to="/">Home</Link>
-        </li>
-        <li className="hover:bg-gray-300 rounded px-2 py-1 transition-colors">
-          <Link to="/todo">TODO 보기</Link>
-        </li>
-        <li className="hover:bg-gray-300 rounded px-2 py-1 transition-colors">
-          <Link to="/exchange">Exchange 보기</Link>
-        </li>
-      </ul>
-
-      {/!* 닫기 버튼 *!/}
-      <button onClick={onClose} className="mb-4 p-2 rounded bg-gray-300 hover:bg-gray-400">
-        닫기
-      </button>
-    </aside>
-  )*/
-
-  // Menu items.
   const items = [
     {
       title: 'Home',
@@ -53,17 +24,17 @@ export default function Aside() {
     {
       title: 'Exchange',
       url: '/exchange',
-      icon: Inbox,
+      icon: CircleDollarSignIcon,
     },
     {
       title: 'Todo',
       url: '/todo',
-      icon: Calendar,
+      icon: ListTodoIcon,
     },
     {
       title: 'User',
       url: '/user',
-      icon: Search,
+      icon: UserIcon,
     },
   ]
 
