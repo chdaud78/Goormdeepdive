@@ -1,5 +1,6 @@
-import profileImage from "@/assets/profile.jpg"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card.jsx"
+import profileImage from '@/assets/profile.jpg'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.jsx'
+import Button from '@/components/ui/myBtn.jsx'
 
 const Main = () => (
   <div className="container">
@@ -10,6 +11,7 @@ const Main = () => (
       <CardContent>
         <img src={profileImage} className="w-50" alt="프로필 이미지" />
         <p>박총명</p>
+        <Button isPrimary={true} />
       </CardContent>
     </Card>
   </div>
