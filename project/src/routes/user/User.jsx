@@ -1,7 +1,7 @@
 import { useEffect, useReducer } from 'react'
 
 import { Card, CardContent, CardHeader } from '@/components/ui/card.jsx'
-import { fetchReducer, initialState } from '@/util/reducer.js'
+import { fetchReducer, initialState } from '@/utils/reducer.js'
 
 const User = () => {
   const [state, dispatch] = useReducer(fetchReducer, initialState)
@@ -9,6 +9,7 @@ const User = () => {
   useEffect(() => {
     const controller = new AbortController()
     controller.abort()
+
     const fetchData = async () => {
       dispatch({ type: 'start' })
       try {
@@ -27,12 +28,12 @@ const User = () => {
   }, [])
 
   return (
-    <div className="flex gap-3 flex-wrap">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
       {state.loading && <p>Loading...</p>}
       {state.error && <p>Error : {state.error}</p>}
       {state.users &&
         state.users.map((user) => (
-          <Card className="w-65" key={user.id}>
+          <Card key={user.id}>
             <CardHeader>Users</CardHeader>
             <CardContent>{user.name}</CardContent>
           </Card>

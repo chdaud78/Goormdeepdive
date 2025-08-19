@@ -1,4 +1,4 @@
-import { CircleDollarSignIcon, Home, ListTodoIcon, UserIcon } from 'lucide-react'
+import { CircleDollarSignIcon, Home, ListTodoIcon, UserIcon, UsersIcon } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import {
@@ -12,28 +12,34 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarTrigger,
-} from '@/components/ui/sidebar'
+} from '@/components/ui/sidebar.jsx'
+import { ROUTES } from '@/lib/routes.js'
 
 export default function Aside() {
   const items = [
     {
       title: 'Home',
-      url: '/',
+      url: ROUTES.HOME,
       icon: Home,
     },
     {
+      title: 'Profile',
+      url: ROUTES.MEMBER.PROFILE,
+      icon: UsersIcon,
+    },
+    {
       title: 'Exchange',
-      url: '/exchange',
+      url: ROUTES.EXCHANGE.ROOT,
       icon: CircleDollarSignIcon,
     },
     {
       title: 'Todo',
-      url: '/todo',
+      url: ROUTES.TODO.ROOT,
       icon: ListTodoIcon,
     },
     {
       title: 'User',
-      url: '/user',
+      url: ROUTES.USER.ROOT,
       icon: UserIcon,
     },
   ]

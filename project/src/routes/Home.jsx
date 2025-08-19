@@ -2,7 +2,7 @@ import profileImage from '@/assets/profile.jpg'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import Button from '@/components/ui/myBtn.jsx'
 
-const Main = () => (
+const Home = () => (
   <div>
     <Card>
       <CardHeader>
@@ -17,4 +17,4 @@ const Main = () => (
   </div>
 )
 
-export default Main
+export default Home

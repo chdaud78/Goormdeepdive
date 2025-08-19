@@ -1,0 +1,36 @@
+import { lazy } from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+
+import RootLayout from '@/layouts/RootLayout.jsx'
+import { ROUTES } from '@/lib/routes.js'
+import AuthLayout from '@/routes/auth/AuthLayout.jsx'
+import Exchange from '@/routes/exchange/Exchange.jsx'
+import Home from '@/routes/Home.jsx'
+import NotFound from '@/routes/NotFound.jsx'
+import Todo from '@/routes/todo/Todo.jsx'
+import User from '@/routes/user/User.jsx'
+
+const Profile = lazy(() => import('@/routes/member/Profile.jsx'))
+
+const AppRouters = () => (
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<RootLayout />}>
+        <Route index element={<Home />} />
+        <Route path={ROUTES.MEMBER.ROOT}>
+          <Route path={ROUTES.MEMBER.PROFILE} element={<Profile />} />
+        </Route>
+        <Route element={<AuthLayout />}>
+          <Route path={ROUTES.AUTH.LOGIN} />
+          <Route path={ROUTES.AUTH.REGISTER} />
+        </Route>
+        <Route path={ROUTES.TODO.ROOT} element={<Todo />} />
+        <Route path={ROUTES.EXCHANGE.ROOT} element={<Exchange />} />
+        <Route path={ROUTES.USER.ROOT} element={<User />} />
+        <Route path={ROUTES.NOT_FOUND} element={<NotFound />} />
+      </Route>
+    </Routes>
+  </BrowserRouter>
+)
+
+export default AppRouters

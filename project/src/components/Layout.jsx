@@ -1,12 +1,9 @@
-// Layout.jsx
-import { Outlet } from 'react-router-dom'
-
 import Aside from '@/components/Aside.jsx'
 import Footer from '@/components/Footer.jsx'
 import Header from '@/components/Header.jsx'
 import { SidebarProvider } from '@/components/ui/sidebar.jsx'
 
-function Layout() {
+function Layout({ children }) {
   return (
     <SidebarProvider side="right">
       {/* Header */}
@@ -14,9 +11,7 @@ function Layout() {
         <Header />
 
         {/* Main */}
-        <main className="p-4 flex-1">
-          <Outlet />
-        </main>
+        <main className="p-4 flex-1">{children}</main>
 
         <Footer />
       </div>
