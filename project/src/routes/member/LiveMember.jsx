@@ -28,6 +28,7 @@ export default function LiveMember() {
               </label>
               <input
                 id="name"
+                placeholder="이름을 입력하세요"
                 className="border border-gray-300 rounded px-3 py-2"
                 onChange={(e) => setName(e.target.value)}
                 type="text"

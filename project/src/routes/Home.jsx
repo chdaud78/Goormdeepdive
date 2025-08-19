@@ -1,7 +1,56 @@
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js'
+import { Line } from 'react-chartjs-2'
+
 import profileImage from '@/assets/profile.jpg'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 
 const Home = () => {
+  ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Chart.js Line Chart',
+      },
+    },
+  }
+
+  const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
+
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: 'Dataset 1',
+        data: [2, 3, 4, 5, 6, 7, 8],
+        borderColor: 'rgb(255, 99, 132)',
+      },
+      {
+        label: 'Dataset 2',
+        data: [3, 5, 6, 8, 10, 12, 7],
+        borderColor: 'rgb(53, 162, 235)',
+      },
+      {
+        label: 'Dataset 3',
+        data: [2, 1, 7, 6, 3, 4, 3],
+        borderColor: 'rgb(53, 162, 123)',
+      },
+    ],
+  }
+
   const recentActivities = ['블로그 정리', '데일리 미션', '팀 스터디']
 
   const stats = [
@@ -53,6 +102,10 @@ const Home = () => {
             </div>
           ))}
         </CardContent>
+      </Card>
+
+      <Card>
+        <Line options={options} data={data} />
       </Card>
     </div>
   )
