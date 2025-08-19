@@ -3,6 +3,7 @@ export const ROUTES = {
   MEMBER: {
     ROOT: '/member',
     PROFILE: '/member/profile',
+    LIVE: '/member/live',
   },
   AUTH: {
     LOGIN: 'login',

@@ -28,6 +28,11 @@ export default function Aside() {
       icon: UsersIcon,
     },
     {
+      title: 'Live Profile',
+      url: ROUTES.MEMBER.LIVE,
+      icon: UsersIcon,
+    },
+    {
       title: 'Exchange',
       url: ROUTES.EXCHANGE.ROOT,
       icon: CircleDollarSignIcon,

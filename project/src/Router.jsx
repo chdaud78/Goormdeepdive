@@ -6,6 +6,7 @@ import { ROUTES } from '@/lib/routes.js'
 import AuthLayout from '@/routes/auth/AuthLayout.jsx'
 import Exchange from '@/routes/exchange/Exchange.jsx'
 import Home from '@/routes/Home.jsx'
+import LiveMember from '@/routes/member/LiveMember.jsx'
 import NotFound from '@/routes/NotFound.jsx'
 import Todo from '@/routes/todo/Todo.jsx'
 import User from '@/routes/user/User.jsx'
@@ -19,6 +20,7 @@ const AppRouters = () => (
         <Route index element={<Home />} />
         <Route path={ROUTES.MEMBER.ROOT}>
           <Route path={ROUTES.MEMBER.PROFILE} element={<Profile />} />
+          <Route path={ROUTES.MEMBER.LIVE} element={<LiveMember />} />
         </Route>
         <Route element={<AuthLayout />}>
           <Route path={ROUTES.AUTH.LOGIN} />

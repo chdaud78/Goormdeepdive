@@ -1,6 +1,6 @@
 import { twMerge } from 'tailwind-merge'
 
-export default function Button({ isPrimary }) {
+export default function myButton({ isPrimary }) {
   return (
     <button
       className={twMerge(
