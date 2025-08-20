@@ -4,6 +4,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import RootLayout from '@/layouts/RootLayout.jsx'
 import { ROUTES } from '@/lib/routes.js'
 import AuthLayout from '@/routes/auth/AuthLayout.jsx'
+import Login from '@/routes/auth/Login.jsx'
+import Register from '@/routes/auth/Register.jsx'
 import Exchange from '@/routes/exchange/Exchange.jsx'
 import Home from '@/routes/Home.jsx'
 import LiveMember from '@/routes/member/LiveMember.jsx'
@@ -23,8 +25,8 @@ const AppRouters = () => (
           <Route path={ROUTES.MEMBER.LIVE} element={<LiveMember />} />
         </Route>
         <Route element={<AuthLayout />}>
-          <Route path={ROUTES.AUTH.LOGIN} />
-          <Route path={ROUTES.AUTH.REGISTER} />
+          <Route path={ROUTES.AUTH.LOGIN} element={<Login />} />
+          <Route path={ROUTES.AUTH.REGISTER} element={<Register />} />
         </Route>
         <Route path={ROUTES.TODO.ROOT} element={<Todo />} />
         <Route path={ROUTES.EXCHANGE.ROOT} element={<Exchange />} />

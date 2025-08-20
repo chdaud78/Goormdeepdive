@@ -11,7 +11,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarTrigger,
 } from '@/components/ui/sidebar.jsx'
 import { ROUTES } from '@/lib/routes.js'
 
@@ -49,6 +48,17 @@ export default function Aside() {
     },
   ]
 
+  const footerItems = [
+    {
+      title: '회원가입',
+      url: ROUTES.AUTH.REGISTER,
+    },
+    {
+      title: '로그인',
+      url: ROUTES.AUTH.LOGIN,
+    },
+  ]
+
   return (
     <Sidebar side="right">
       <SidebarContent>
@@ -71,7 +81,19 @@ export default function Aside() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <SidebarTrigger />
+        <div className="flex justify-around py-2">
+          {footerItems.map((item) => (
+            <Link
+              to={item.url}
+              key={item.title}
+              className="px-4 py-2 rounded-sm border border-gray-300
+             text-gray-700 hover:text-blue-600 hover:border-blue-400
+             transition-colors duration-200"
+            >
+              {item.title}
+            </Link>
+          ))}
+        </div>
       </SidebarFooter>
     </Sidebar>
   )
