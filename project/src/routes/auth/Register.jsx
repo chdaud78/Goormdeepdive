@@ -1,6 +1,12 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
+import { Card, CardContent, CardHeader } from '@/components/ui/card.jsx'
+import { ROUTES } from '@/lib/routes.js'
 
 export default function Register() {
+  const navigate = useNavigate()
+
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -22,7 +28,7 @@ export default function Register() {
     if (!form.password) {
       e.password = '비밀번호를 입력하세요.'
     }
-    if (form.password !== form.confirm) {
+    if (form.password !== form.confirm || !form.confirm) {
       e.confirm = '비밀번호가 일치하지 않습니다.'
     }
 
@@ -35,36 +41,68 @@ export default function Register() {
     if (!validate()) {
       return
     }
-    console.log(form)
     alert('회원가입 성공')
+    navigate(ROUTES.AUTH.LOGIN)
   }
 
   return (
-    <div>
-      <h2>회원 가입</h2>
-      <form action="" onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="">이름</label>
-          <input name="name" value={form.name} onChange={onChange} type="text" />
-          {errors.name ? <p>{errors.name}</p> : ''}
-        </div>
-        <div>
-          <label htmlFor="">이메일</label>
-          <input name="email" value={form.email} onChange={onChange} type="text" />
-          {errors.email ? <p>{errors.email}</p> : ''}
-        </div>
-        <div>
-          <label htmlFor="">비밀번호</label>
-          <input name="password" value={form.password} onChange={onChange} type="password" />
-          {errors.password ? <p>{errors.password}</p> : ''}
-        </div>
-        <div>
-          <label htmlFor="">비밀번호 확인</label>
-          <input name="confirm" value={form.confirm} onChange={onChange} type="password" />
-          {errors.confirm ? <p>{errors.confirm}</p> : ''}
-        </div>
-        <button>회원 가입</button>
-      </form>
+    <div className="flex justify-center align-center pt-30">
+      <Card className="w-100">
+        <CardHeader>
+          <h2 className="text-2xl font-bold text-center mb-4">회원 가입</h2>
+        </CardHeader>
+        <CardContent className="flex flex-col">
+          <form action="" onSubmit={onSubmit}>
+            <div className="flex flex-col mb-4">
+              <label htmlFor="">이름</label>
+              <input
+                className="border border-gray-300 rounded px-3 py-2"
+                name="name"
+                value={form.name}
+                onChange={onChange}
+                type="text"
+              />
+              {errors.name ? <p className="text-sm text-red-500">{errors.name}</p> : ''}
+            </div>
+            <div className="flex flex-col mb-4">
+              <label htmlFor="">이메일</label>
+              <input
+                className="border border-gray-300 rounded px-3 py-2"
+                name="email"
+                value={form.email}
+                onChange={onChange}
+                type="text"
+              />
+              {errors.email ? <p className="text-sm text-red-500">{errors.email}</p> : ''}
+            </div>
+            <div className="flex flex-col mb-4">
+              <label htmlFor="">비밀번호</label>
+              <input
+                className="border border-gray-300 rounded px-3 py-2"
+                name="password"
+                value={form.password}
+                onChange={onChange}
+                type="password"
+              />
+              {errors.password ? <p className="text-sm text-red-500">{errors.password}</p> : ''}
+            </div>
+            <div className="flex flex-col mb-4">
+              <label htmlFor="">비밀번호 확인</label>
+              <input
+                className="border border-gray-300 rounded px-3 py-2"
+                name="confirm"
+                value={form.confirm}
+                onChange={onChange}
+                type="password"
+              />
+              {errors.confirm ? <p className="text-sm text-red-500">{errors.confirm}</p> : ''}
+            </div>
+            <button className="w-full flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 transition">
+              회원 가입
+            </button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   )
 }

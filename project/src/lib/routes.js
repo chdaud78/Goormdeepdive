@@ -6,7 +6,7 @@ export const ROUTES = {
     LIVE: '/member/live',
   },
   AUTH: {
-    LOGIN: 'login',
+    LOGIN: '/login',
     REGISTER: '/register',
   },
   EXCHANGE: {
