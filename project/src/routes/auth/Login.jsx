@@ -1,23 +1,28 @@
+import { useState } from 'react'
+import { Link } from 'react-router'
+import { useNavigate } from 'react-router-dom'
+
 import { auth } from '@/api/auth.js'
-import {useState} from "react";
-import {Link} from "react-router"
+import { token } from '@/api/token.js'
+import { ROUTES } from '@/lib/routes.js'
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const navigate = useNavigate()
+
   const handleLogin = async () => {
-    const response = await auth.login({
-      email: email,
-      password: password,
+    await auth.login({ email, password }).then((res) => {
+      token.set(res.data.token)
+      alert('로그인이 완료되었습니다.')
+      navigate(ROUTES.HOME)
     })
-    console.log(response)
   }
 
   return (
     <div className="max-w-sm w-full bg-white shadow-lg rounded-2xl p-8 mx-auto">
-      <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-        로그인
-      </h2>
+      <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">로그인</h2>
 
       <div className="flex flex-col mb-5">
         <label className="text-sm font-medium text-gray-600 mb-2">이메일</label>
@@ -48,7 +53,7 @@ export default function Login() {
       </button>
 
       <p className="mt-5 text-center text-sm text-gray-500">
-        계정이 없으신가요?{" "}
+        계정이 없으신가요?{' '}
         <Link to="/register" className="text-blue-500 hover:underline">
           회원가입
         </Link>

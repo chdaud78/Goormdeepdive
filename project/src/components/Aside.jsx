@@ -1,6 +1,8 @@
 import { CircleDollarSignIcon, Home, ListTodoIcon, UserIcon, UsersIcon } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
+import { auth } from '@/api/auth.js'
+import { token } from '@/api/token.js'
 import {
   Sidebar,
   SidebarContent,
@@ -15,6 +17,9 @@ import {
 import { ROUTES } from '@/lib/routes.js'
 
 export default function Aside() {
+  const _token = token.get()
+  const navigate = useNavigate()
+
   const items = [
     {
       title: 'Home',
@@ -59,6 +64,17 @@ export default function Aside() {
     },
   ]
 
+  const handleLogout = async () => {
+    try {
+      const res = await auth.logout()
+      console.log('로그아웃 성공:', res.data)
+      token.clear()
+      navigate(ROUTES.AUTH.LOGIN)
+    } catch (err) {
+      console.error('로그아웃 실패:', err)
+    }
+  }
+
   return (
     <Sidebar side="right">
       <SidebarContent>
@@ -82,17 +98,28 @@ export default function Aside() {
       </SidebarContent>
       <SidebarFooter>
         <div className="flex justify-around py-2">
-          {footerItems.map((item) => (
-            <Link
-              to={item.url}
-              key={item.title}
-              className="px-4 py-2 rounded-sm border border-gray-300
+          {_token ? (
+            <button
+              className="px-4 py-2 rounded-sm border border-red-300
+             text-red-700 hover:text-blue-600 hover:border-blue-400
+             transition-colors duration-200"
+              onClick={handleLogout}
+            >
+              로그아웃
+            </button>
+          ) : (
+            footerItems.map((item) => (
+              <Link
+                to={item.url}
+                key={item.title}
+                className="px-4 py-2 rounded-sm border border-gray-300
              text-gray-700 hover:text-blue-600 hover:border-blue-400
              transition-colors duration-200"
-            >
-              {item.title}
-            </Link>
-          ))}
+              >
+                {item.title}
+              </Link>
+            ))
+          )}
         </div>
       </SidebarFooter>
     </Sidebar>

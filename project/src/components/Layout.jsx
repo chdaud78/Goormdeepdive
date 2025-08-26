@@ -11,7 +11,7 @@ function Layout({ children }) {
         <Header />
 
         {/* Main */}
-        <main className="p-4 flex-1">{children}</main>
+        <main className="flex-1 flex items-center justify-center p-4">{children}</main>
 
         <Footer />
       </div>

@@ -8,8 +8,10 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js'
+import { useEffect, useState } from 'react'
 import { Line } from 'react-chartjs-2'
 
+import { me } from '@/api/me.js'
 import profileImage from '@/assets/profile.jpg'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 
@@ -60,6 +62,14 @@ const Home = () => {
     { label: '와와와와', value: '3' },
   ]
 
+  const [myProfile, setMyProfile] = useState({})
+
+  useEffect(() => {
+    me.get().then((res) => {
+      setMyProfile(res.data)
+    })
+  }, [])
+
   return (
     <div className="container mx-auto p-4 space-y-6">
       {/* 프로필 카드 */}
@@ -69,8 +79,8 @@ const Home = () => {
         </CardHeader>
         <CardContent className="flex flex-col items-center space-y-2">
           <img src={profileImage} className="w-24 h-24 rounded-full" alt="프로필 이미지" />
-          <p className="text-lg font-semibold">박총명</p>
-          <p className="text-sm text-gray-500">Frontend 개발자</p>
+          <p className="text-lg font-semibold">{myProfile.name}</p>
+          <p className="text-sm text-gray-500">{myProfile.email}</p>
         </CardContent>
       </Card>
 

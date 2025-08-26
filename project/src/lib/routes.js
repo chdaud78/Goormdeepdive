@@ -8,6 +8,7 @@ export const ROUTES = {
   AUTH: {
     LOGIN: '/login',
     REGISTER: '/register',
+    MYPAGE: '/mypage',
   },
   EXCHANGE: {
     ROOT: '/exchange',

@@ -5,11 +5,13 @@ import RootLayout from '@/layouts/RootLayout.jsx'
 import { ROUTES } from '@/lib/routes.js'
 import AuthLayout from '@/routes/auth/AuthLayout.jsx'
 import Login from '@/routes/auth/Login.jsx'
+import Mypage from '@/routes/auth/Mypage.jsx'
 import Register from '@/routes/auth/Register.jsx'
 import Exchange from '@/routes/exchange/Exchange.jsx'
 import Home from '@/routes/Home.jsx'
 import LiveMember from '@/routes/member/LiveMember.jsx'
 import NotFound from '@/routes/NotFound.jsx'
+import Practice from '@/routes/practice/Practice.jsx'
 import Todo from '@/routes/todo/Todo.jsx'
 import User from '@/routes/user/User.jsx'
 
@@ -27,10 +29,12 @@ const AppRouters = () => (
         <Route element={<AuthLayout />}>
           <Route path={ROUTES.AUTH.LOGIN} element={<Login />} />
           <Route path={ROUTES.AUTH.REGISTER} element={<Register />} />
+          <Route path={ROUTES.AUTH.MYPAGE} element={<Mypage />} />
         </Route>
         <Route path={ROUTES.TODO.ROOT} element={<Todo />} />
         <Route path={ROUTES.EXCHANGE.ROOT} element={<Exchange />} />
         <Route path={ROUTES.USER.ROOT} element={<User />} />
+        <Route path="/practice" element={<Practice />} />
         <Route path={ROUTES.NOT_FOUND} element={<NotFound />} />
       </Route>
     </Routes>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { auth } from '@/api/auth.js'
 import { Card, CardContent, CardHeader } from '@/components/ui/card.jsx'
 import { ROUTES } from '@/lib/routes.js'
 
@@ -41,13 +42,23 @@ export default function Register() {
     if (!validate()) {
       return
     }
-    alert('회원가입 성공')
-    navigate(ROUTES.AUTH.LOGIN)
+    auth
+      .register({ name: form.name, email: form.email, password: form.password })
+      .then(() => {
+        alert('회원가입 성공')
+        navigate(ROUTES.AUTH.LOGIN)
+      })
+      .catch((e) => {
+        console.error(e)
+        if (e.status === 409) {
+          alert('이미 존재하는 이메일 입니다.')
+        }
+      })
   }
 
   return (
-    <div className="flex justify-center align-center pt-30">
-      <Card className="w-100">
+    <div>
+      <Card className="w-100 flex-1">
         <CardHeader>
           <h2 className="text-2xl font-bold text-center mb-4">회원 가입</h2>
         </CardHeader>
