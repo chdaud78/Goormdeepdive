@@ -65,14 +65,8 @@ export default function Aside() {
   ]
 
   const handleLogout = async () => {
-    try {
-      const res = await auth.logout()
-      console.log('로그아웃 성공:', res.data)
-      token.clear()
-      navigate(ROUTES.AUTH.LOGIN)
-    } catch (err) {
-      console.error('로그아웃 실패:', err)
-    }
+    await auth.logout()
+    navigate(ROUTES.AUTH.LOGIN)
   }
 
   return (

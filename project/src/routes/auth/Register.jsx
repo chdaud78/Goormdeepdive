@@ -46,7 +46,7 @@ export default function Register() {
       .register({ name: form.name, email: form.email, password: form.password })
       .then(() => {
         alert('회원가입 성공')
-        navigate(ROUTES.AUTH.LOGIN)
+        navigate(ROUTES.AUTH.LOGIN, { replace: true }) // 히스토리 남기기 x)
       })
       .catch((e) => {
         console.error(e)

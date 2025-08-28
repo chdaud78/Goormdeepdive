@@ -26,7 +26,7 @@ api.interceptors.response.use(
 api.interceptors.request.use(
   (config) => {
     const t = token.get()
-    if (t) {
+    if (config.auth !== false && t) {
       config.headers.Authorization = `Bearer ${t}`
     }
     return config

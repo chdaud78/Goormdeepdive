@@ -1,3 +1,4 @@
+import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Link } from 'react-router'
 import { useNavigate } from 'react-router-dom'
@@ -12,12 +13,21 @@ export default function Login() {
 
   const navigate = useNavigate()
 
-  const handleLogin = async () => {
-    await auth.login({ email, password }).then((res) => {
+  const loginMutation = useMutation({
+    mutationFn: ({ email, password }) => auth.login({ email, password }),
+    onSuccess: (res) => {
       token.set(res.data.token)
       alert('로그인이 완료되었습니다.')
       navigate(ROUTES.HOME)
-    })
+    },
+    onError: (err) => {
+      console.error(err)
+      alert('로그인에 실패했습니다.')
+    },
+  })
+
+  const handleLogin = () => {
+    loginMutation.mutate({ email, password })
   }
 
   return (
