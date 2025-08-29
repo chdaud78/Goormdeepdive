@@ -11,6 +11,8 @@ import Exchange from '@/routes/exchange/Exchange.jsx'
 import Home from '@/routes/Home.jsx'
 import LiveMember from '@/routes/member/LiveMember.jsx'
 import NotFound from '@/routes/NotFound.jsx'
+import Guestbook from '@/routes/post/Guestbook.jsx'
+import PostView from '@/routes/post/PostView.jsx'
 import Practice from '@/routes/practice/Practice.jsx'
 import Todo from '@/routes/todo/Todo.jsx'
 import User from '@/routes/user/User.jsx'
@@ -35,6 +37,10 @@ const AppRouters = () => (
         <Route path={ROUTES.EXCHANGE.ROOT} element={<Exchange />} />
         <Route path={ROUTES.USER.ROOT} element={<User />} />
         <Route path="/practice" element={<Practice />} />
+        <Route path={ROUTES.POST.ROOT}>
+          <Route path={ROUTES.POST.GUESTBOOK} element={<Guestbook />} />
+          <Route path={ROUTES.POST.VIEW} element={<PostView />} />
+        </Route>
         <Route path={ROUTES.NOT_FOUND} element={<NotFound />} />
       </Route>
     </Routes>

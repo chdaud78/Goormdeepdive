@@ -53,6 +53,14 @@ export default function Aside() {
     },
   ]
 
+  const postItems = [
+    {
+      title: 'GUESTBOOK',
+      url: ROUTES.POST.GUESTBOOK,
+      icon: Home,
+    },
+  ]
+
   const footerItems = [
     {
       title: '회원가입',
@@ -77,6 +85,23 @@ export default function Aside() {
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <Link to={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>POST</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {postItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <Link to={item.url}>

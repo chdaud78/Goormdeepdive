@@ -33,3 +33,23 @@ api.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 )
+
+export async function http(url, { method = 'GET', body, withAuth } = {}) {
+  try {
+    const res = await api.request({
+      url,
+      method,
+      data: body,
+      withAuth,
+    })
+    return res.data
+  } catch (err) {
+    const res = err.response
+    const data = res?.data || {}
+
+    const error = new Error(data?.error?.message || data?.message || 'Request failed')
+    error.data = data
+    error.status = res?.status
+    throw error
+  }
+}

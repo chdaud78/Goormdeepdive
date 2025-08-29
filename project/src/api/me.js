@@ -6,7 +6,7 @@ export const me = {
   patchMe: async (updatedProfile) => api.patch('/me', updatedProfile),
   // 비밀번호 변경
   changePassword: async ({ currentPassword, newPassword }) =>
-    api.patch('/me/change-password', {
+    api.patch('/me/password', {
       currentPassword,
       newPassword,
     }),

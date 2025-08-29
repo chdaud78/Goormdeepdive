@@ -19,5 +19,10 @@ export const ROUTES = {
   USER: {
     ROOT: 'USER',
   },
+  POST: {
+    ROOT: `/post`,
+    GUESTBOOK: '/post/guestbook',
+    VIEW: '/post/:postId',
+  },
   NOT_FOUND: '*',
 }
