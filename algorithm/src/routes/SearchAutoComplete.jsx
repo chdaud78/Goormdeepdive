@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {BOOKS} from "./data/books.js";
+import {BOOKS} from "../data/books.js";
 
 const SearchAutoComplete = () => {
   const [q, setQ] = useState("")

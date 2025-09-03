@@ -1,11 +1,15 @@
 import './App.css'
-import SearchAutoComplete from "./SearchAutoComplete.jsx";
+import SearchAutoComplete from "./routes/SearchAutoComplete.jsx";
+import GradeSorter from "./routes/GradeSorter.jsx";
+import PriceSorter from "./routes/PriceSorter.jsx";
 
 function App() {
 
   return (
     <>
-      <SearchAutoComplete  />
+      {/*<SearchAutoComplete  />*/}
+      <GradeSorter />
+      <PriceSorter />
     </>
   )
 }
