@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { quickSortBy, byNum } from "../utils/sorters.js";
 
-const makeProducts = (n = 5000) =>
+const makeProducts = (n = 100000) =>
   Array.from({ length: n }, (_, i) => ({
     id: i + 1,
     name: `Item #${i + 1}`,
