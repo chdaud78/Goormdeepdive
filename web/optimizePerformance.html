@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>최악 성능 원페이지 😈 (간단 버전)</title>
+
+    <!-- display:swap 및 google font내 자동 최적화 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <!-- 😈 렌더-블로킹 외부 CSS 여러 개 => 불필요 삭제 -->
+
+    <style>
+        /* 😈 @import 체인으로 추가 네트워크 왕복 => 불필요 제거 */
+
+        /* 기본 스타일 (불필요한 클래스 다량 포함 → Coverage에서 미사용으로 검출) */
+        body {
+            margin : 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', serif;
+        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 16px; }
+        .section { margin: 32px 0; }
+        .btn { padding: 10px 14px; background:#111; color:#fff; border:none; cursor:pointer; }
+
+        #ad-slot {
+            min-height: 120px;
+            background-color: #ffef9f;
+            border: 3px dashed #cc7a00;
+            padding: 20px;
+        }
+
+        /* 😈 대량 미사용 CSS (일부만 표시, 필요 시 수업에서 복붙 추가) */
+        .u1{color:#111}.u2{color:#222}.u3{color:#333}.u4{color:#444}.u5{color:#555}
+        .u6{color:#666}.u7{color:#777}.u8{color:#888}.u9{color:#999}.u10{color:#aaa}
+
+        /* 😈 레이아웃 시프트 유발: 크기 미지정 이미지/광고 자리 */
+        .hero {
+            aspect-ratio: 16/9;
+            overflow: hidden;
+        }
+        .hero img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        /* 😈 Reflow 빈번: margin을 스크립트로 토글 예정 */
+        .thrash { width:100%; height:150px; background:linear-gradient(45deg,#ff8c8c,#ffd36e); }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="section">😈 최악의 성능 데모 (간단 원페이지)</h1>
+
+    <div class="section">
+        <p>이 페이지는 교육용으로 <strong>나쁜 성능 패턴을 모두</strong> 모아둔 샘플입니다.</p>
+        <ul>
+            <li>렌더-블로킹 폰트/스크립트/CSS</li>
+            <li>큰 이미지 / 크기 미지정 / lazy 미사용 → LCP & CLS 악화</li>
+            <li>자동재생 동영상</li>
+            <li>광고 영역 지연 삽입 → CLS</li>
+            <li>동기식 XHR</li>
+            <li>document.write</li>
+            <li>스크롤/리사이즈 시 레이아웃 스래싱</li>
+            <li>대규모 DOM 생성</li>
+            <li>방대한 미사용 CSS · 코드</li>
+        </ul>
+    </div>
+
+    <!-- 😈 구식 document.write 사용 -> 제거 -->
+    <p style="color:#c00">document.write 로 삽입된 텍스트 (권장 X)</p>
+
+    <!-- 😈 거대한 원본 이미지: width/height 미지정, lazy 없음 → LCP/CLS 악화 => 이미지 크기 지정 및 lazy 지정 -->
+    <div class="section hero">
+        <h2>1) 큰 히어로 이미지 (크기 미지정)</h2>
+        <img src="https://picsum.photos/1600/900" width="1600" height="900" loading="eager" alt="huge" />
+    </div>
+
+    <!-- 😈 자동재생 고해상도 동영상 (대역폭/디코딩 부하) => poster 및 preload 설정 -->
+    <div class="section">
+        <h2>2) 자동재생 동영상</h2>
+        <video muted playsinline controls style="width:100%" preload="metadata">
+            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
+        </video>
+    </div>
+
+    <!-- 😈 광고 영역: 초기 공간 미예약 → 2초 후 삽입으로 CLS 유발 => 즉시 삽입 -->
+    <div class="section" id="ad-slot">
+        <h2>3) 광고 영역 (지연 로드 → 레이아웃 밀림)</h2>
+        <p>📢 광고가 이제 로드되었습니다! (공간 미예약 → CLS)</p>
+    </div>
+
+    <!-- 😈 레이아웃 스래싱 데모 박스 -->
+    <div class="section thrash"></div>
+
+    <!-- 😈 대규모 DOM 생성 버튼 -->
+    <div class="section">
+        <h2>4) 거대한 테이블 생성</h2>
+        <button class="btn" id="build-dom">생성</button>
+        <div id="table-zone"></div>
+    </div>
+
+    <div class="section">
+        <h2>5) 네트워크/스크립트 비효율 데모</h2>
+        <button class="btn" id="sync-xhr">동기식 XHR 실행</button>
+    </div>
+
+    <footer class="section">
+        <p>Lighthouse / Performance / Network / Coverage 패널로 문제를 찾아보세요.</p>
+    </footer>
+</div>
+
+<!-- 😈 비효율 스크립트 (강제 동기 레이아웃, 이벤트 남발, 동기 XHR 등) -->
+<script type="module">
+  // 광고 지연 삽입 → CLS => 삭제 후 HTML로 사용
+
+  // 스크롤/리사이즈: 디바운스/스로틀 없음 + 강제 동기 레이아웃 측정 반복
+  let rafId = null
+  function thrash() {
+    if(rafId) {
+      return
+    }
+
+    rafId = requestAnimationFrame(() => {
+      rafId = null
+
+      for (let i = 0; i < 100; i++) {
+        document.body.style.marginLeft = (i % 2) ? '0px' : '1px';
+        // 강제 리플로우 유발 측정
+        const w = document.body.getBoundingClientRect().width;
+        console.log('layout width', w);
+      }
+    })
+  }
+  window.addEventListener('scroll', thrash);
+  window.addEventListener('resize', thrash);
+
+  // 대규모 DOM 생성 (Coverage/Performance 확인용)
+  document.getElementById('build-dom').addEventListener('click', () => {
+    const frag = document.createDocumentFragment();
+    const zone = document.getElementById('table-zone');
+    const table = document.createElement('table');
+    table.border = '1';
+    const rows = 300, cols = 20;
+    for (let r = 0; r < rows; r++) {
+      const tr = document.createElement('tr');
+      for (let c = 0; c < cols; c++) {
+        const td = document.createElement('td');
+        td.textContent = `R${r}-C${c}-` + Math.random().toString(36).slice(2);
+        tr.appendChild(td);
+      }
+      table.appendChild(tr);
+    }
+    zone.replaceChild(frag.appendChild(table));
+  });
+
+  // 동기식 XHR (메인 스레드 블로킹)
+  document.getElementById('sync-xhr').addEventListener('click', () => {
+    try {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', 'https://httpstat.us/200?sleep=1500&cache_bust=' + Date.now(), false); // 동기식 요청
+      xhr.send();
+      alert('동기식 XHR 완료: status ' + xhr.status);
+    } catch (e) { console.warn(e); }
+  });
+
+  // 주기적으로 불필요한 무거운 작업 실행 (CPU 소모)
+  setInterval(() => {
+    const a = Array.from({length: 150000}, (_, i) => Math.sqrt(i));
+    a.reverse();
+  }, 4000);
+</script>
+</body>
+</html>
