@@ -13,11 +13,11 @@ export default function MemoAbuse() {
   const [n, setN] = useState(0)
   const [q, setQ] = useState('')
 
-  const title = useMemo(() => `현재 n: ${n}`, [q]) // 잘못된 의존성
-  const tinyLabels = useMemo(() => Array.from({ length: 500 }).map((_, i) => `#${i}`), [q])
+  const title = `현재 n: ${n}`
+  const tinyLabels = useMemo(() => Array.from({ length: 500 }).map((_, i) => `#${i}`), [])
 
-  const onInc = useCallback(() => setN((v) => v + 1), [tinyLabels])
-  const onPingFactory = useCallback((id: number) => () => console.log('ping', id, q, n), [q, n])
+  const onInc = useCallback(() => setN((v) => v + 1), [])
+  const onPingFactory = useCallback((id: number) => () => console.log('ping', id), [])
 
   return (
     <section className="section">
@@ -37,7 +37,7 @@ export default function MemoAbuse() {
       <div className="card mb-3">{title}</div>
       <div className="flex flex-wrap gap-2">
         {tinyLabels.map((lb, i) => (
-          <Tiny key={i} label={lb} onPing={onPingFactory(i)} />
+          <Tiny key={lb} label={lb} onPing={onPingFactory(i)} />
         ))}
       </div>
     </section>

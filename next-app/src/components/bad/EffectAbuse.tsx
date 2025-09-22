@@ -5,12 +5,21 @@ export default function EffectAbuse() {
   const [count, setCount] = useState(0)
 
   useEffect(() => {
+    let cancelled = false
+
     fetch('/api/products?noop=' + Math.random())
       .then((r) => r.json())
-      .then(() => console.log('fetch done'))
+      .then(() => {
+        if (!cancelled) console.log('fetch done')
+      })
 
     const onScroll = () => setCount((c) => c + 1)
     window.addEventListener('scroll', onScroll)
+
+    return () => {
+      cancelled = true
+      window.removeEventListener('scroll', onScroll)
+    }
   }, []) // [] 없음
 
   return (

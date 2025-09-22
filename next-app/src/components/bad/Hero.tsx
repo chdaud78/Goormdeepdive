@@ -1,12 +1,21 @@
 'use client'
 import { useEffect, useMemo, useState } from 'react'
+import Client from '@/src/components/bad/Client'
 import Image from 'next/image'
 
-export default function Hero() {
-  const [data, setData] = useState<any[]>([])
-  const [query, setQuery] = useState('')
+async function getTop10() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products`)
+  const json = await res.json()
+  const sorted = json.items.sort((a: any, b: any) => b.price - a.price).slice(0, 10)
+  return sorted.map((p: any) => ({ id: p.id, name: p.name, price: p.price, image: p.image }))
+}
 
-  useEffect(() => {
+export default async function Hero() {
+  /*  const [data, setData] = useState<any[]>([])
+  const [query, setQuery] = useState('')*/
+  const top10 = await getTop10()
+
+  /*useEffect(() => {
     let mounted = true
     fetch('/api/products', { cache: 'no-store' })
       .then((r) => r.json())
@@ -21,33 +30,13 @@ export default function Hero() {
   const top10 = useMemo(() => {
     const sorted = [...data].sort((a, b) => b.price - a.price)
     return sorted.slice(0, 10).filter((i) => (query ? i.name.includes(query) : true))
-  }, [data, query])
+  }, [data, query])*/
 
   return (
     <section className="section">
       <h2 className="h1 mb-3">/bad – Hero</h2>
       <p className="text-slate-300">클라이언트 fetch + 무거운 계산을 매 렌더마다 수행</p>
-      <input
-        className="mt-4 w-full rounded-xl bg-slate-800/70 px-3 py-2 outline-none"
-        placeholder="검색(입력 시 매번 무거운 계산)"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-      />
-      <div className="grid-3 mt-6">
-        {top10.map((p) => (
-          <div key={p.id} className="card">
-            <Image
-              src={p.image}
-              alt={p.name}
-              width={1200}
-              height={800}
-              className="rounded-xl w-full h-48 object-cover"
-            />
-            <div className="mt-3 font-semibold">{p.name}</div>
-            <div className="text-slate-400">{p.price.toLocaleString()}원</div>
-          </div>
-        ))}
-      </div>
+      <Client items={top10} />
     </section>
   )
 }

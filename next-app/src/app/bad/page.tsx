@@ -14,10 +14,6 @@ export default function BadPage() {
   return (
     <>
       <Hero />
-      <Features />
-      <Gallery />
-      <CTA />
-
       <ContextAbuse />
       <UnstableProps />
       <KeyedList />
