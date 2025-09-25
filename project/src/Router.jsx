@@ -16,6 +16,8 @@ import PostView from '@/routes/post/PostView.jsx'
 import Practice from '@/routes/practice/Practice.jsx'
 import Todo from '@/routes/todo/Todo.jsx'
 import User from '@/routes/user/User.jsx'
+import UseDeferred from '@/routes/practice/UseDeferred.jsx'
+import UseActionState from '@/routes/practice/UseActionState.jsx'
 
 const Profile = lazy(() => import('@/routes/member/Profile.jsx'))
 
@@ -37,6 +39,8 @@ const AppRouters = () => (
         <Route path={ROUTES.EXCHANGE.ROOT} element={<Exchange />} />
         <Route path={ROUTES.USER.ROOT} element={<User />} />
         <Route path="/practice" element={<Practice />} />
+        <Route path="/practice2" element={<UseDeferred />} />
+        <Route path="/practice3" element={<UseActionState />} />
         <Route path={ROUTES.POST.ROOT}>
           <Route path={ROUTES.POST.GUESTBOOK} element={<Guestbook />} />
           <Route path={ROUTES.POST.VIEW} element={<PostView />} />
