@@ -1,9 +1,34 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { z } from 'zod'
 
 import { auth } from '@/api/auth.js'
 import { Card, CardContent, CardHeader } from '@/components/ui/card.jsx'
 import { ROUTES } from '@/lib/routes.js'
+
+const RegisterSchema = z
+  .object({
+    email: z.string().trim().toLowerCase().email('올바른 이메일 형식이 아닙니다.'),
+    name: z
+      .string()
+      .trim()
+      .min(2, '이름은 2자 이상 입력해주세요.')
+      .max(30, '이름은 30자 이하로 입력해 주세요.'),
+    password: z
+      .string()
+      .min(8, '비밀번호는 8자 이상이어야 합니다.')
+      .regex(/[A-Za-z]/, '영문자를 포함해주세요.')
+      .regex(/\d/, '숫자를 포함해 주세요.'),
+    confirm: z
+      .string()
+      .min(8, '비밀번호는 8자 이상이어야 합니다.')
+      .regex(/[A-Za-z]/, '영문자를 포함해주세요.')
+      .regex(/\d/, '숫자를 포함해 주세요.'),
+  })
+  .refine((data) => data.password === data.confirm, {
+    path: ['confirm'],
+    message: '비밀번호가 일치하지 않습니다.',
+  })
 
 export default function Register() {
   const navigate = useNavigate()
@@ -18,7 +43,7 @@ export default function Register() {
 
   const onChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }))
 
-  const validate = () => {
+  /*  const validate = () => {
     const e = {}
     if (!form.name.trim()) {
       e.name = '이름을 입력하세요.'
@@ -35,25 +60,36 @@ export default function Register() {
 
     setErrors(e)
     return Object.keys(e).length === 0
-  }
+  }*/
+  const [pending, setPending] = useState(false)
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault()
-    if (!validate()) {
+    setErrors({})
+    const parsed = RegisterSchema.safeParse(form)
+    if (!parsed.success) {
+      const fieldErrors = parsed.error.flatten().fieldErrors
+      setErrors({
+        email: fieldErrors.email?.[0],
+        name: fieldErrors.name?.[0],
+        password: fieldErrors.password?.[0],
+        confirm: fieldErrors.confirm?.[0],
+      })
+
       return
     }
-    auth
-      .register({ name: form.name, email: form.email, password: form.password })
-      .then(() => {
-        alert('회원가입 성공')
-        navigate(ROUTES.AUTH.LOGIN, { replace: true }) // 히스토리 남기기 x)
-      })
-      .catch((e) => {
-        console.error(e)
-        if (e.status === 409) {
-          alert('이미 존재하는 이메일 입니다.')
-        }
-      })
+
+    try {
+      setPending(true)
+      await auth.register(parsed.data)
+      navigate('/login', { replace: true })
+    } catch (err) {
+      console.error(err)
+      if (err.status === 409) alert('이미 존재하는 이메일입니다.')
+      setErrors({ _form: err?.message || '회원가입에 실패했어요. 다시 시도해주세요' })
+    } finally {
+      setPending(false)
+    }
   }
 
   return (
@@ -108,8 +144,11 @@ export default function Register() {
               />
               {errors.confirm ? <p className="text-sm text-red-500">{errors.confirm}</p> : ''}
             </div>
-            <button className="w-full flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 transition">
-              회원 가입
+            <button
+              disabled={pending}
+              className="w-full flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 transition"
+            >
+              {pending ? '가입 처리 중' : '회원 가입'}
             </button>
           </form>
         </CardContent>
