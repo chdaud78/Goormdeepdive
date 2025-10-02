@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
+import { startTransition, useState } from 'react'
 
 import { postsApi } from '@/api/post.js'
+import LikeButton from '@/components/LikeButton.jsx'
 
 export default function Guestbook() {
   const qc = useQueryClient()
@@ -163,6 +164,14 @@ export default function Guestbook() {
     createPost.mutate({ title, body, tags })
   }
 
+  // 좋아요 후 서버 데이터와 동기화하고 싶다면 invalidate
+  const onLikeSettled = () => {
+    // 가벼운 앱이면 생략 가능. 확정 데이터를 맞추려면 아래 활성화:
+    startTransition(() => {
+      qc.invalidateQueries({ queryKey: ['posts'] })
+    })
+  }
+
   return (
     <div className="w-full mx-auto max-w-3xl p-4">
       {/* 작성 폼 */}
@@ -237,17 +246,25 @@ export default function Guestbook() {
               <li key={p._id} className="rounded-xl border border-slate-200 p-4">
                 <div className="mb-2 flex items-start justify-between gap-4">
                   <h3 className="text-lg font-semibold">{p.title}</h3>
-                  <button
-                    onClick={() => {
-                      if (confirm('정말 삭제하시겠습니까?')) {
-                        deletePost.mutate(p._id)
-                      }
-                    }}
-                    disabled={deletePost.isPending}
-                    className="rounded-lg border px-3 py-1 text-red-600 hover:bg-red-50 disabled:opacity-60"
-                  >
-                    {deletePost.isPending ? '삭제 중…' : '삭제'}
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <LikeButton
+                      postId={p._id}
+                      initiallyLiked={Boolean(p.liked)}
+                      initialCount={Number.isFinite(p.likesCount) ? p.likesCount : 0}
+                      onSettled={onLikeSettled}
+                    />
+                    <button
+                      onClick={() => {
+                        if (confirm('정말 삭제하시겠습니까?')) {
+                          deletePost.mutate(p._id)
+                        }
+                      }}
+                      disabled={deletePost.isPending}
+                      className="rounded-lg border px-3 py-1 text-red-600 hover:bg-red-50 disabled:opacity-60"
+                    >
+                      {deletePost.isPending ? '삭제 중…' : '삭제'}
+                    </button>
+                  </div>
                 </div>
 
                 <div className="text-sm text-slate-700 whitespace-pre-wrap">{p.body}</div>

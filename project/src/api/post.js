@@ -27,4 +27,7 @@ export const postsApi = {
     http(`${BASE_URL}/${id}`, { method: 'PATCH', body: payload, auth: true }),
 
   remove: (id) => http(`${BASE_URL}/${id}`, { method: 'DELETE', auth: true }),
+  like: (id, payload) =>
+    http(`${BASE_URL}/${id}/like`, { method: 'POST', body: payload, auth: true }),
+  getLike: (id) => http(`${BASE_URL}/${id}/like`, { method: 'GET', auth: true }),
 }
